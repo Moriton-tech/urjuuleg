@@ -1,0 +1,2229 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0f1f0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="mobile-web-app-capable" content="yes">
+<title>МорьТон — Үржүүлгийн Удирдлага</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Mongolian&family=JetBrains+Mono:wght@400;600&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --ink:#0f1a0f; --ink2:#2a3a2a; --ink3:#4a5e4a; --muted:#7a907a; --line:#d4ddd4; --line2:#e8ede8;
+  --bg:#f4f6f2; --surface:#ffffff; --surface2:#f0f3ee;
+  --green:#1a5c2a; --green2:#2e7d42; --green-bg:#e8f5ec; --green-line:#a8d8b8;
+  --amber:#7a4a00; --amber2:#b36b00; --amber-bg:#fff8e8; --amber-line:#f0d080;
+  --red:#7a1a1a; --red2:#b02020; --red-bg:#fdeaea; --red-line:#f0a0a0;
+  --blue:#1a3a6a; --blue2:#2a5aaa; --blue-bg:#e8eef8; --blue-line:#a0bce0;
+  --gold:#8a6a00; --gold-bg:#fffae8; --gold-line:#e0c840;
+  --r:8px; --rlg:14px; --rxl:20px;
+  --shadow:0 1px 4px rgba(15,26,15,.08); --shadow-md:0 4px 20px rgba(15,26,15,.12);
+  --font:'Manrope',sans-serif; --mono:'JetBrains Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:var(--ink);height:100%;-webkit-text-size-adjust:100%}
+html,body{height:100%;overscroll-behavior:none;-webkit-tap-highlight-color:transparent;touch-action:manipulation}
+body{font-family:var(--font);font-size:14px;background:var(--bg);color:var(--ink);overflow:hidden;-webkit-font-smoothing:antialiased}
+button,input,select,textarea{font-family:var(--font);touch-action:manipulation}
+input,select,textarea{font-size:16px!important;color:var(--ink)}
+button{cursor:pointer}
+
+/* ── APP SHELL ── */
+#app{display:flex;flex-direction:column;height:100vh;height:100dvh;overflow:hidden}
+
+/* ── TOPBAR ── */
+.topbar{
+  height:calc(56px + env(safe-area-inset-top));
+  padding-top:env(safe-area-inset-top);
+  background:var(--ink);
+  color:#fff;
+  display:flex;align-items:center;gap:12px;
+  padding-left:16px;padding-right:16px;
+  flex-shrink:0;
+  position:relative;z-index:50;
+}
+.topbar-logo{display:flex;align-items:center;gap:8px}
+.topbar-mark{width:32px;height:32px;background:var(--green2);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.topbar-name{font-size:15px;font-weight:700;letter-spacing:-.3px;white-space:nowrap}
+.topbar-sub{font-size:10px;opacity:.6;margin-top:1px;font-family:var(--mono)}
+.topbar-spacer{flex:1}
+.topbar-stats{display:flex;gap:0;background:rgba(255,255,255,.08);border-radius:999px;padding:3px 5px;flex-shrink:0}
+.topbar-stat{padding:3px 10px;text-align:center;border-right:1px solid rgba(255,255,255,.15)}
+.topbar-stat:last-child{border-right:none}
+.ts-n{font-size:13px;font-weight:700;line-height:1;font-family:var(--mono)}
+.ts-l{font-size:9px;opacity:.7;margin-top:1px;text-transform:uppercase;letter-spacing:.4px}
+.topbar-menu-btn{width:36px;height:36px;background:rgba(255,255,255,.1);border:none;border-radius:8px;color:#fff;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0;display:none}
+
+/* ── BODY ── */
+.body{display:flex;flex:1;overflow:hidden;min-height:0}
+
+/* ── SIDEBAR ── */
+.sidebar{width:224px;background:var(--surface);border-right:1px solid var(--line);display:flex;flex-direction:column;flex-shrink:0;overflow-y:auto;z-index:40}
+.sidebar::-webkit-scrollbar{width:4px}
+.sidebar::-webkit-scrollbar-thumb{background:var(--line2);border-radius:2px}
+.sb-section{padding:14px 14px 4px;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.sb-list{padding:0 8px;margin-bottom:4px}
+.nav-item{display:flex;align-items:center;gap:9px;padding:8px 10px;border-radius:var(--r);cursor:pointer;border:none;background:none;width:100%;text-align:left;color:var(--ink3);font-size:13px;font-weight:500;font-family:var(--font);transition:background .12s,color .12s;margin-bottom:2px}
+.nav-item:hover{background:var(--surface2);color:var(--ink)}
+.nav-item.active{background:var(--green-bg);color:var(--green);font-weight:600}
+.nav-icon{width:26px;height:26px;border-radius:6px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;transition:background .12s}
+.nav-item.active .nav-icon{background:var(--green2);color:#fff}
+.nav-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.nav-badge{font-size:10px;font-weight:700;font-family:var(--mono);background:var(--surface2);color:var(--muted);padding:1px 6px;border-radius:10px;flex-shrink:0;min-width:20px;text-align:center}
+.nav-badge.g{background:var(--green-bg);color:var(--green)}
+.nav-badge.a{background:var(--amber-bg);color:var(--amber)}
+.sb-bottom{margin-top:auto;padding:8px;border-top:1px solid var(--line2)}
+
+/* ── MAIN ── */
+.main{flex:1;min-width:0;overflow-y:auto;overflow-x:hidden;padding:20px;background:var(--bg);-webkit-overflow-scrolling:touch;overscroll-behavior:contain}
+.main::-webkit-scrollbar{width:6px}
+.main::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px}
+
+/* ── SCREEN ── */
+.screen{display:none;flex-direction:column;gap:16px;animation:fadeIn .16s ease}
+.screen.active{display:flex}
+@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+
+/* ── PAGE HEADER ── */
+.ph{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap;padding-bottom:2px}
+.ph-l{}
+.ph-title{font-size:20px;font-weight:800;letter-spacing:-.4px;color:var(--ink)}
+.ph-sub{font-size:12px;color:var(--muted);margin-top:2px}
+.ph-r{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+
+/* ── CARDS ── */
+.card{background:var(--surface);border:1px solid var(--line);border-radius:var(--rlg);padding:16px;box-shadow:var(--shadow)}
+.card-title{font-size:10px;font-weight:700;letter-spacing:.07em;text-transform:uppercase;color:var(--muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+.card-title::after{content:'';flex:1;height:1px;background:var(--line2)}
+
+/* ── STAT CARDS ── */
+.stats-row{display:grid;gap:10px}
+.stat-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--rlg);padding:14px 16px;position:relative;overflow:hidden}
+.stat-accent{position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:var(--rlg) 0 0 var(--rlg)}
+.stat-label{font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.stat-value{font-size:24px;font-weight:800;font-family:var(--mono);margin-top:4px;line-height:1;letter-spacing:-.5px}
+.stat-sub{font-size:11px;color:var(--muted);margin-top:3px}
+
+/* ── GRIDS ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+
+/* ── BUTTONS ── */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:8px 14px;border-radius:var(--r);font-size:13px;font-weight:600;font-family:var(--font);border:1px solid var(--line);background:var(--surface);color:var(--ink);transition:all .12s;white-space:nowrap;cursor:pointer}
+.btn:hover{background:var(--surface2)}
+.btn:active{transform:scale(.98)}
+.btn-primary{background:var(--green2);color:#fff;border-color:var(--green2)}
+.btn-primary:hover{background:var(--green)}
+.btn-amber{background:var(--amber-bg);color:var(--amber);border-color:var(--amber-line)}
+.btn-red{background:var(--red-bg);color:var(--red2);border-color:var(--red-line)}
+.btn-blue{background:var(--blue-bg);color:var(--blue2);border-color:var(--blue-line)}
+.btn-dark{background:var(--ink);color:#fff;border-color:var(--ink)}
+.btn-sm{padding:5px 10px;font-size:12px}
+.btn-xs{padding:3px 8px;font-size:11px;border-radius:6px}
+.btn-icon{width:32px;height:32px;padding:0;border-radius:8px}
+
+/* ── BADGES ── */
+.badge{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;white-space:nowrap}
+.b-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-line)}
+.b-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-line)}
+.b-red{background:var(--red-bg);color:var(--red2);border:1px solid var(--red-line)}
+.b-blue{background:var(--blue-bg);color:var(--blue2);border:1px solid var(--blue-line)}
+.b-gold{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-line)}
+.b-gray{background:var(--surface2);color:var(--muted);border:1px solid var(--line)}
+
+/* ── FORMS ── */
+.fg{display:grid;gap:10px;margin-bottom:10px}
+.fg.c2{grid-template-columns:1fr 1fr}
+.fg.c3{grid-template-columns:1fr 1fr 1fr}
+.field{display:flex;flex-direction:column;gap:4px}
+.field label{font-size:12px;font-weight:600;color:var(--ink3)}
+.field label .req{color:var(--red2)}
+.inp{background:var(--surface2);border:1.5px solid var(--line);border-radius:var(--r);padding:9px 11px;font-size:14px;outline:none;width:100%;transition:border-color .15s,background .15s;color:var(--ink)}
+.inp:focus{border-color:var(--green2);background:var(--surface);box-shadow:0 0 0 3px rgba(46,125,66,.1)}
+textarea.inp{resize:vertical;min-height:64px;line-height:1.5}
+select.inp{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%234a5e4a' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 10px center;padding-right:28px}
+
+/* ── TABLES ── */
+.tbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;border-radius:var(--r);border:1px solid var(--line)}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;padding:9px 12px;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;border-bottom:1px solid var(--line);background:var(--surface2);white-space:nowrap;position:sticky;top:0}
+td{padding:10px 12px;border-bottom:1px solid var(--line2);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{cursor:pointer;transition:background .1s}
+tbody tr:hover td{background:var(--surface2)}
+
+/* ── MODAL ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(15,26,15,.5);z-index:1000;display:flex;align-items:center;justify-content:center;padding:16px;padding-bottom:calc(16px + env(safe-area-inset-bottom));backdrop-filter:blur(2px)}
+.modal{background:var(--surface);border-radius:var(--rxl);padding:20px;width:100%;max-width:520px;max-height:90vh;overflow-y:auto;box-shadow:var(--shadow-md);-webkit-overflow-scrolling:touch}
+.modal-lg{max-width:700px}
+.modal-title{font-size:16px;font-weight:700;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;align-items:center;gap:8px}
+.modal-close{background:none;border:none;font-size:20px;color:var(--muted);cursor:pointer;padding:0;line-height:1;flex-shrink:0}
+.modal-close:hover{color:var(--ink)}
+.modal-footer{display:flex;justify-content:flex-end;gap:8px;margin-top:16px;padding-top:12px;border-top:1px solid var(--line2);flex-wrap:wrap}
+
+/* ── LIST ITEMS ── */
+.list-item{display:flex;align-items:center;gap:10px;padding:10px 12px;background:var(--surface2);border-radius:var(--r);border:1.5px solid transparent;cursor:pointer;transition:all .12s;margin-bottom:6px}
+.list-item:hover{border-color:var(--green-line);background:var(--surface)}
+.list-item.sel{border-color:var(--green2);background:var(--green-bg)}
+.li-av{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.li-info{flex:1;min-width:0}
+.li-name{font-weight:700;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-sub{font-size:11px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.li-r{text-align:right;flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:3px}
+
+/* ── TABS ── */
+.tabs{display:flex;gap:3px;background:var(--surface2);padding:3px;border-radius:var(--r);border:1px solid var(--line);overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar{display:none}
+.tab-btn{flex:1;padding:6px 12px;font-size:12px;font-weight:600;border-radius:6px;cursor:pointer;border:none;background:none;color:var(--muted);white-space:nowrap;transition:all .15s;font-family:var(--font)}
+.tab-btn.active{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+/* ── INFO BLOCKS ── */
+.info-block{border-radius:var(--r);padding:10px 14px;font-size:12px;margin-bottom:12px}
+.ib-green{background:var(--green-bg);color:var(--green);border:1px solid var(--green-line)}
+.ib-amber{background:var(--amber-bg);color:var(--amber);border:1px solid var(--amber-line)}
+.ib-blue{background:var(--blue-bg);color:var(--blue2);border:1px solid var(--blue-line)}
+
+/* ── PROGRESS BAR ── */
+.prog-wrap{height:6px;background:var(--surface2);border-radius:3px;overflow:hidden;margin-top:5px}
+.prog-fill{height:100%;border-radius:3px;transition:width .4s}
+
+/* ── DIVIDER ── */
+.divider{height:1px;background:var(--line2);margin:12px 0}
+
+/* ── TOAST ── */
+#toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;padding:10px 16px;border-radius:var(--r);font-size:13px;font-weight:600;box-shadow:var(--shadow-md);z-index:9999;opacity:0;transform:translateY(10px);transition:opacity .2s,transform .2s;pointer-events:none;max-width:300px}
+#toast.show{opacity:1;transform:none}
+#toast.ok{background:var(--green)}
+#toast.err{background:var(--red2)}
+
+/* ── BOTTOM NAV (mobile) ── */
+.bottom-nav{display:none;position:fixed;bottom:0;left:0;right:0;z-index:200;background:var(--surface);border-top:1px solid var(--line);padding-bottom:env(safe-area-inset-bottom)}
+.bn-inner{display:flex;align-items:stretch;width:100%}
+.bn-i{flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:8px 2px;cursor:pointer;border:none;background:none;color:var(--muted);font-family:var(--font);gap:3px;transition:color .15s;min-height:54px;touch-action:manipulation;position:relative;-webkit-tap-highlight-color:transparent}
+.bn-i.active{color:var(--green)}
+.bn-icon{font-size:22px;line-height:1;display:block}
+.bn-label{font-size:10px;font-weight:600;line-height:1;white-space:nowrap;display:block}
+.bn-dot{position:absolute;top:5px;right:calc(50% - 16px);width:7px;height:7px;border-radius:50%;background:var(--amber2);display:none}
+.bn-dot.show{display:block}
+
+/* ── DRAWER (mobile) ── */
+.drawer-overlay{display:none;position:fixed;inset:0;background:rgba(15,26,15,.45);z-index:300}
+.drawer{display:none;position:fixed;top:0;left:0;bottom:0;width:260px;background:var(--surface);z-index:400;overflow-y:auto;-webkit-overflow-scrolling:touch;box-shadow:4px 0 24px rgba(15,26,15,.2);padding-top:env(safe-area-inset-top)}
+.drawer.open,.drawer-overlay.open{display:block}
+.drawer-hdr{padding:16px 16px 12px;border-bottom:1px solid var(--line2);display:flex;justify-content:space-between;align-items:center}
+.drawer-close{background:none;border:none;font-size:20px;cursor:pointer;color:var(--muted);padding:0;line-height:1}
+
+/* ── MISC ── */
+.mono{font-family:var(--mono)}
+.muted{color:var(--muted)}
+.row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.spacer{flex:1}
+.chip{display:inline-flex;align-items:center;gap:3px;padding:2px 8px;border-radius:20px;font-size:11px;font-weight:600;background:var(--surface2);color:var(--muted);border:1px solid var(--line)}
+.empty{text-align:center;padding:32px 16px;color:var(--muted)}
+.empty-icon{font-size:28px;margin-bottom:8px;opacity:.4}
+.empty-text{font-size:13px}
+.hidden{display:none!important}
+
+/* ═══ RESPONSIVE ═══ */
+@media(max-width:700px){
+  .sidebar{display:none}
+  .bottom-nav{display:flex}
+  .topbar-menu-btn{display:flex}
+  .topbar-stats{display:none}
+  .main{padding:12px 12px calc(62px + env(safe-area-inset-bottom))}
+  .g2,.g3,.g4{grid-template-columns:1fr 1fr}
+  .dash-cols{grid-template-columns:1fr}
+  #dash-stats{grid-template-columns:1fr 1fr}
+  .fg.c2,.fg.c3{grid-template-columns:1fr}
+  .ph{flex-direction:column}
+  .ph-r{width:100%}
+  .tbl-wrap table{min-width:520px}
+  #toast{right:10px;left:10px;bottom:calc(62px + env(safe-area-inset-bottom));max-width:none;text-align:center}
+  .modal-overlay{align-items:center;padding:12px}
+  .modal{border-radius:var(--rxl);max-height:88vh}
+}
+@media(max-width:380px){
+  .g2,.g3,.g4{grid-template-columns:1fr}
+  .topbar-name{font-size:13px}
+}
+@media(min-width:701px){
+  .bottom-nav,.topbar-menu-btn{display:none!important}
+  .drawer-overlay:not(.open),.drawer:not(.open){display:none}
+}
+@media(min-width:701px) and (max-width:960px){
+  .sidebar{width:56px}
+  .nav-label,.nav-badge,.sb-section,.sb-bottom .nav-label{display:none}
+  .main{padding:16px}
+  .g4{grid-template-columns:1fr 1fr}
+}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ══ TOPBAR ══ -->
+<div class="topbar">
+  <div class="topbar-logo">
+    <div class="topbar-mark">🐴</div>
+    <div>
+      <div class="topbar-name">МорьТон</div>
+      <div class="topbar-sub">Үржүүлгийн систем</div>
+    </div>
+  </div>
+  <button class="topbar-menu-btn" onclick="openDrawer()">☰</button>
+  <div class="topbar-spacer"></div>
+  <span id="sync-status-badge" style="display:none;font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;cursor:pointer" onclick="showSyncQueue()"></span>
+  <div class="topbar-stats">
+    <div class="topbar-stat"><div class="ts-n" id="ts-clients">0</div><div class="ts-l">Харилцагч</div></div>
+    <div class="topbar-stat"><div class="ts-n" id="ts-mares">0</div><div class="ts-l">Гүү</div></div>
+    <div class="topbar-stat"><div class="ts-n" id="ts-pending">0</div><div class="ts-l">Хүлээгдэж буй</div></div>
+  </div>
+</div>
+
+<!-- ══ BODY ══ -->
+<div class="body">
+
+<!-- ── SIDEBAR ── -->
+<nav class="sidebar" id="sidebar">
+  <div class="sb-section">Үндсэн</div>
+  <div class="sb-list">
+    <button class="nav-item active" onclick="nav('dashboard')">
+      <div class="nav-icon">📊</div><span class="nav-label">Хяналтын самбар</span>
+    </button>
+  </div>
+  <div class="sb-section">Бүртгэл</div>
+  <div class="sb-list">
+    <button class="nav-item" onclick="nav('clients')">
+      <div class="nav-icon">👤</div><span class="nav-label">Харилцагчид</span>
+      <span class="nav-badge" id="nb-clients">0</span>
+    </button>
+    <button class="nav-item" onclick="nav('stallions')">
+      <div class="nav-icon">♂</div><span class="nav-label">Азаргууд</span>
+      <span class="nav-badge" id="nb-stallions">0</span>
+    </button>
+    <button class="nav-item" onclick="nav('mares')">
+      <div class="nav-icon">♀</div><span class="nav-label">Гүүнүүд</span>
+      <span class="nav-badge" id="nb-mares">0</span>
+    </button>
+  </div>
+  <div class="sb-section">Ажил</div>
+  <div class="sb-list">
+    <button class="nav-item" onclick="nav('schedule')">
+      <div class="nav-icon">📅</div><span class="nav-label">Үзлэг & Хуваарь</span>
+      <span class="nav-badge a" id="nb-schedule">0</span>
+    </button>
+    <button class="nav-item" onclick="nav('breeding')">
+      <div class="nav-icon">🔗</div><span class="nav-label">Гишгүүлэлт</span>
+      <span class="nav-badge g" id="nb-breeding">0</span>
+    </button>
+    <button class="nav-item" onclick="nav('pregnancy')">
+      <div class="nav-icon">🤰</div><span class="nav-label">Хээлтэлт</span>
+      <span class="nav-badge g" id="nb-pregnancy">0</span>
+    </button>
+  </div>
+  <div class="sb-section">Санхүү & Тайлан</div>
+  <div class="sb-list">
+    <button class="nav-item" onclick="nav('finance')">
+      <div class="nav-icon">💰</div><span class="nav-label">Санхүү</span>
+    </button>
+    <button class="nav-item" onclick="nav('reports')">
+      <div class="nav-icon">📈</div><span class="nav-label">Тайлан</span>
+    </button>
+  </div>
+  <div class="sb-bottom">
+    <button class="nav-item" onclick="nav('settings')">
+      <div class="nav-icon">⚙️</div><span class="nav-label">Тохиргоо (Sheets)</span>
+    </button>
+  </div>
+</nav>
+
+<!-- ── DRAWER (mobile) ── -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-hdr">
+    <div class="topbar-logo">
+      <div class="topbar-mark">🐴</div>
+      <div><div class="topbar-name" style="color:var(--ink)">МорьТон</div></div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+  <div class="sb-section">Бүртгэл</div>
+  <div class="sb-list">
+    <button class="nav-item" onclick="nav('clients');closeDrawer()"><div class="nav-icon">👤</div><span class="nav-label">Харилцагчид</span></button>
+    <button class="nav-item" onclick="nav('stallions');closeDrawer()"><div class="nav-icon">♂</div><span class="nav-label">Азаргууд</span></button>
+    <button class="nav-item" onclick="nav('mares');closeDrawer()"><div class="nav-icon">♀</div><span class="nav-label">Гүүнүүд</span></button>
+  </div>
+  <div class="sb-section">Ажил</div>
+  <div class="sb-list">
+    <button class="nav-item" onclick="nav('pregnancy');closeDrawer()"><div class="nav-icon">🤰</div><span class="nav-label">Хээлтэлт</span></button>
+    <button class="nav-item" onclick="nav('finance');closeDrawer()"><div class="nav-icon">💰</div><span class="nav-label">Санхүү</span></button>
+    <button class="nav-item" onclick="nav('reports');closeDrawer()"><div class="nav-icon">📈</div><span class="nav-label">Тайлан</span></button>
+    <button class="nav-item" onclick="nav('settings');closeDrawer()"><div class="nav-icon">⚙️</div><span class="nav-label">Тохиргоо</span></button>
+  </div>
+</div>
+
+<!-- ══ MAIN ══ -->
+<main class="main" id="main">
+
+<!-- ─── DASHBOARD ─── -->
+<div class="screen active" id="screen-dashboard">
+  <div class="ph">
+    <div class="ph-l"><div class="ph-title">Хяналтын самбар</div><div class="ph-sub" id="dash-date"></div></div>
+    <div class="ph-r">
+      <button class="btn btn-primary" onclick="openModal('modal-quick-exam')">🩺 Яаралтай үзлэг</button>
+      <button class="btn" onclick="openModal('modal-add-schedule')">+ Үзлэг товлох</button>
+    </div>
+  </div>
+  <div class="g4 stats-row" id="dash-stats"></div>
+  <div class="g2 dash-cols" style="gap:14px">
+    <div>
+      <div class="card"><div class="card-title">Өнөөдрийн хуваарь</div><div id="dash-today"></div></div>
+      <div class="card"><div class="card-title">Маргааш</div><div id="dash-tomorrow"></div></div>
+    </div>
+    <div>
+      <div class="card"><div class="card-title">Гишгүүлэлт хүлээж буй</div><div id="dash-pending-breed"></div></div>
+      <div class="card"><div class="card-title">Сүүлийн үйл ажиллагаа</div><div id="dash-recent"></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- ─── CLIENTS ─── -->
+<div class="screen" id="screen-clients">
+  <div class="ph">
+    <div class="ph-l"><div class="ph-title">Харилцагчид</div><div class="ph-sub">Гүүний эзэд</div></div>
+    <div class="ph-r"><button class="btn btn-primary" onclick="openModal('modal-add-client')">+ Харилцагч нэмэх</button></div>
+  </div>
+  <div class="card">
+    <input class="inp" id="client-search" placeholder="🔍 Нэр, утас, хаягаар хайх..." oninput="renderClients()" style="margin-bottom:12px">
+    <div id="client-list"></div>
+  </div>
+</div>
+
+<!-- ─── STALLIONS ─── -->
+<div class="screen" id="screen-stallions">
+  <div class="ph">
+    <div class="ph-l"><div class="ph-title">Азаргууд</div></div>
+    <div class="ph-r"><button class="btn btn-primary" onclick="openModal('modal-add-stallion')">+ Азарга нэмэх</button></div>
+  </div>
+  <div id="stallion-list" class="g2"></div>
+</div>
+
+<!-- ─── MARES ─── -->
+<div class="screen" id="screen-mares">
+  <div class="ph">
+    <div class="ph-l"><div class="ph-title">Гүүнүүд</div></div>
+    <div class="ph-r">
+      <select class="inp btn" id="mare-filter-client" onchange="renderMares()" style="min-width:150px">
+        <option value="">Бүх харилцагч</option>
+      </select>
+      <select class="inp btn" id="mare-filter-stallion" onchange="renderMares()" style="min-width:140px">
+        <option value="">Бүх азарга</option>
+      </select>
+      <button class="btn btn-primary" onclick="openAddMareModal()">+ Гүү нэмэх</button>
+    </div>
+  </div>
+  <div class="card">
+    <input class="inp" id="mare-search" placeholder="🔍 Гүүний нэрээр хайх..." oninput="renderMares()" style="margin-bottom:12px">
+    <div id="mare-list"></div>
+  </div>
+</div>
+
+<!-- ─── SCHEDULE ─── -->
+<div class="screen" id="screen-schedule">
+  <div class="ph">
+    <div class="ph-l"><div class="ph-title">Үзлэг & Хуваарь</div></div>
+    <div class="ph-r">
+      <button class="btn btn-primary" onclick="openModal('modal-quick-exam')">🩺 Яаралтай үзлэг</button>
+      <button class="btn" onclick="openModal('modal-add-schedule')">+ Товлох</button>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:14px">
+    <button class="tab-btn active" onclick="schedTab('today',this)">Өнөөдөр</button>
+    <button class="tab-btn" onclick="schedTab('upcoming',this)">Ирэх 7 хоног</button>
+    <button class="tab-btn" onclick="schedTab('all',this)">Бүгд</button>
+    <button class="tab-btn" onclick="schedTab('done',this)">Дууссан</button>
+  </div>
+  <div id="schedule-list"></div>
+</div>
+
+<!-- ─── BREEDING ─── -->
+<div class="screen" id="screen-breeding">
+  <div class="ph">
+    <div class="ph-l"><div class="ph-title">Гишгүүлэлт</div><div class="ph-sub">Ороо орсон гүүнүүдийн гишгүүлэлтийн бүртгэл</div></div>
+    <div class="ph-r"><button class="btn btn-primary" onclick="openModal('modal-add-breeding')">+ Гишгүүлэлт бүртгэх</button></div>
+  </div>
+  <div class="tabs" style="margin-bottom:14px">
+    <button class="tab-btn active" onclick="breedTab('pending',this)">Гишгүүлэх хүлээж буй</button>
+    <button class="tab-btn" onclick="breedTab('done',this)">Гишгүүлсэн</button>
+    <button class="tab-btn" onclick="breedTab('all',this)">Бүгд</button>
+  </div>
+  <div id="breeding-list"></div>
+</div>
+
+<!-- ─── PREGNANCY ─── -->
+<div class="screen" id="screen-pregnancy">
+  <div class="ph">
+    <div class="ph-l"><div class="ph-title">Хээлтэлтийн хяналт</div></div>
+  </div>
+  <div id="pregnancy-list"></div>
+</div>
+
+<!-- ─── FINANCE ─── -->
+<div class="screen" id="screen-finance">
+  <div class="ph">
+    <div class="ph-l"><div class="ph-title">Санхүү</div></div>
+    <div class="ph-r"><button class="btn btn-primary" onclick="openModal('modal-add-invoice')">+ Нэхэмжлэл</button></div>
+  </div>
+  <div class="g3 stats-row" id="finance-stats" style="margin-bottom:4px"></div>
+  <div class="tabs" style="margin-bottom:14px">
+    <button class="tab-btn active" onclick="finTab('invoices',this)">Нэхэмжлэлүүд</button>
+    <button class="tab-btn" onclick="finTab('payments',this)">Төлбөрүүд</button>
+    <button class="tab-btn" onclick="finTab('outstanding',this)">Үлдэгдэл</button>
+  </div>
+  <div id="finance-list"></div>
+</div>
+
+<!-- ─── REPORTS ─── -->
+<div class="screen" id="screen-reports">
+  <div class="ph">
+    <div class="ph-l"><div class="ph-title">Тайлан</div></div>
+    <div class="ph-r">
+      <select class="inp" id="report-year" onchange="renderReports()" style="width:100px"></select>
+      <select class="inp" id="report-month" onchange="renderReports()" style="width:110px">
+        <option value="">Бүх сар</option>
+        <option value="1">1-р сар</option><option value="2">2-р сар</option><option value="3">3-р сар</option>
+        <option value="4">4-р сар</option><option value="5">5-р сар</option><option value="6">6-р сар</option>
+        <option value="7">7-р сар</option><option value="8">8-р сар</option><option value="9">9-р сар</option>
+        <option value="10">10-р сар</option><option value="11">11-р сар</option><option value="12">12-р сар</option>
+      </select>
+    </div>
+  </div>
+  <div class="tabs" style="margin-bottom:14px">
+    <button class="tab-btn active" onclick="repTab('client',this)">Харилцагчаар</button>
+    <button class="tab-btn" onclick="repTab('stallion',this)">Азаргаар</button>
+    <button class="tab-btn" onclick="repTab('monthly',this)">Сараар</button>
+    <button class="tab-btn" onclick="repTab('pregnancy',this)">Хээлтэлт</button>
+    <button class="tab-btn" onclick="repTab('finance',this)">Санхүү</button>
+    <button class="tab-btn" onclick="repTab('mare',this)">Гүүний түүх</button>
+  </div>
+  <div id="report-content"></div>
+</div>
+
+<!-- ─── SETTINGS ─── -->
+<div class="screen" id="screen-settings">
+  <div class="ph"><div class="ph-l"><div class="ph-title">Тохиргоо</div><div class="ph-sub">Google Sheets холболт</div></div></div>
+  <div class="card">
+    <div class="card-title">Google Apps Script URL</div>
+    <div class="info-block ib-blue" style="margin-bottom:14px">
+      <strong>Тохиргоо:</strong><br>
+      1. <a href="https://script.google.com" target="_blank" style="color:var(--blue2)">script.google.com</a> → Шинэ төсөл → Code.gs-д тохирох кодыг оруулна<br>
+      2. Deploy → New deployment → Web app (Anyone access)<br>
+      3. URL-г доор оруулна
+    </div>
+    <div class="field" style="margin-bottom:12px">
+      <label>Web App URL</label>
+      <input class="inp" id="api-url" placeholder="https://script.google.com/macros/s/.../exec" style="font-family:var(--mono);font-size:12px!important">
+    </div>
+    <div class="row" style="gap:8px;margin-bottom:16px">
+      <button class="btn btn-primary" onclick="saveSettings()">Хадгалах</button>
+      <button class="btn" onclick="testConnection()">🔗 Холболт шалгах</button>
+      <button class="btn" onclick="syncFromSheets()">↓ Sheet-с татах</button>
+      <button class="btn btn-amber" onclick="flushQueue()">↑ Одоо sync хийх</button>
+    </div>
+    <div id="conn-result" style="display:none"></div>
+    <div class="divider"></div>
+    <div class="card-title">Үйлчилгээний тариф</div>
+    <div class="fg c2">
+      <div class="field"><label>Гишгүүлэлтийн үнэ (₮)</label><input class="inp" id="price-breeding" type="number" placeholder="500000"></div>
+      <div class="field"><label>ЭХО үзлэгийн үнэ (₮)</label><input class="inp" id="price-exam" type="number" placeholder="50000"></div>
+    </div>
+    <button class="btn btn-primary" onclick="savePrices()">Тариф хадгалах</button>
+  </div>
+  <div class="card" style="margin-top:4px">
+    <div class="card-title">Sync дараалал</div>
+    <div id="sync-queue-info" style="margin-bottom:12px"></div>
+    <div class="row" style="gap:8px">
+      <button class="btn btn-sm" onclick="showSyncQueue()">📋 Дараалал харах</button>
+      <button class="btn btn-sm btn-primary" onclick="retrySyncQueue()">↑ Дахин оролдох</button>
+      <button class="btn btn-sm btn-red" onclick="clearSyncQueue()">🗑 Цэвэрлэх</button>
+    </div>
+  </div>
+</div>
+
+</main><!-- end .main -->
+</div><!-- end .body -->
+
+<!-- ══ BOTTOM NAV ══ -->
+<nav class="bottom-nav">
+  <div class="bn-inner">
+    <button class="bn-i active" id="bni-dashboard" onclick="nav('dashboard')">
+      <span class="bn-icon">📊</span>
+      <span class="bn-label">Самбар</span>
+    </button>
+    <button class="bn-i" id="bni-schedule" onclick="nav('schedule')">
+      <span class="bn-icon">📅</span>
+      <span class="bn-label">Үзлэг</span>
+      <span class="bn-dot" id="bni-dot-schedule"></span>
+    </button>
+    <button class="bn-i" id="bni-breeding" onclick="nav('breeding')">
+      <span class="bn-icon">🔗</span>
+      <span class="bn-label">Гишгүүл</span>
+      <span class="bn-dot" id="bni-dot-breeding"></span>
+    </button>
+    <button class="bn-i" id="bni-reports" onclick="nav('reports')">
+      <span class="bn-icon">📈</span>
+      <span class="bn-label">Тайлан</span>
+    </button>
+    <button class="bn-i" id="bni-more" onclick="openDrawer()">
+      <span class="bn-icon">☰</span>
+      <span class="bn-label">Цэс</span>
+    </button>
+  </div>
+</nav>
+
+</div><!-- end #app -->
+<div id="toast"></div>
+<!-- ══════════════════════════════════════════════════════
+     MODALS
+══════════════════════════════════════════════════════ -->
+
+<!-- ── ADD CLIENT ── -->
+<div class="modal-overlay" id="modal-add-client" style="display:none" onclick="if(event.target===this)closeModal('modal-add-client')">
+  <div class="modal">
+    <div class="modal-title">Харилцагч нэмэх <button class="modal-close" onclick="closeModal('modal-add-client')">×</button></div>
+    <div class="fg c2">
+      <div class="field"><label>Нэр <span class="req">*</span></label><input class="inp" id="cl-name" placeholder="Нэр"></div>
+      <div class="field"><label>Утас <span class="req">*</span></label><input class="inp" id="cl-phone" placeholder="99001234" type="tel"></div>
+    </div>
+    <div class="fg c2">
+      <div class="field"><label>Байгууллага</label><input class="inp" id="cl-org" placeholder="Нэр (заавал биш)"></div>
+      <div class="field"><label>Регистр / ID</label><input class="inp" id="cl-reg" placeholder="УЕ12345678"></div>
+    </div>
+    <div class="field" style="margin-bottom:10px"><label>Хаяг</label><input class="inp" id="cl-addr" placeholder="Хаяг"></div>
+    <div class="field" style="margin-bottom:10px"><label>Тэмдэглэл</label><textarea class="inp" id="cl-note" rows="2" placeholder="Нэмэлт мэдээлэл..."></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-add-client')">Болих</button>
+      <button class="btn btn-primary" onclick="saveClient()">Хадгалах</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD STALLION ── -->
+<div class="modal-overlay" id="modal-add-stallion" style="display:none" onclick="if(event.target===this)closeModal('modal-add-stallion')">
+  <div class="modal">
+    <div class="modal-title">Азарга нэмэх <button class="modal-close" onclick="closeModal('modal-add-stallion')">×</button></div>
+    <div class="fg c2">
+      <div class="field"><label>Нэр <span class="req">*</span></label><input class="inp" id="st-name" placeholder="Азарганы нэр"></div>
+      <div class="field"><label>Чип / Дугаар</label><input class="inp" id="st-chip" placeholder="Чип дугаар"></div>
+    </div>
+    <div class="fg c3">
+      <div class="field"><label>Төрсөн он</label><input class="inp" id="st-year" type="number" placeholder="2018" min="2000" max="2030"></div>
+      <div class="field"><label>Өнгө</label><input class="inp" id="st-color" placeholder="Зэрэм, хүрэн..."></div>
+      <div class="field"><label>Үүлдэр</label><input class="inp" id="st-breed" placeholder="Монгол, Ахалтек..."></div>
+    </div>
+    <div class="fg c2">
+      <div class="field"><label>Жин (кг)</label><input class="inp" id="st-weight" type="number" placeholder="480"></div>
+      <div class="field"><label>Өндөр (см)</label><input class="inp" id="st-height" type="number" placeholder="152"></div>
+    </div>
+    <div class="field" style="margin-bottom:10px"><label>Тэмдэглэл</label><textarea class="inp" id="st-note" rows="2"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-add-stallion')">Болих</button>
+      <button class="btn btn-primary" onclick="saveStallion()">Хадгалах</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD MARE ── -->
+<div class="modal-overlay" id="modal-add-mare" style="display:none" onclick="if(event.target===this)closeModal('modal-add-mare')">
+  <div class="modal">
+    <div class="modal-title">Гүү бүртгэх <button class="modal-close" onclick="closeModal('modal-add-mare')">×</button></div>
+    <div class="info-block ib-amber">Гүүний эзэн харилцагчийг заавал сонгоно уу</div>
+    <div class="fg c2">
+      <div class="field"><label>Харилцагч (эзэн) <span class="req">*</span></label><select class="inp" id="mr-client"></select></div>
+      <div class="field"><label>Нэр <span class="req">*</span></label><input class="inp" id="mr-name" placeholder="Гүүний нэр"></div>
+    </div>
+    <div class="fg c2">
+      <div class="field"><label>Харьяа азарга <span class="req">*</span></label><select class="inp" id="mr-stallion"></select></div>
+      <div class="field"><label>Чип / Дугаар</label><input class="inp" id="mr-chip" placeholder="Чип дугаар"></div>
+    </div>
+    <div class="fg c3">
+      <div class="field"><label>Төрсөн он</label><input class="inp" id="mr-year" type="number" placeholder="2016"></div>
+      <div class="field"><label>Өнгө</label><input class="inp" id="mr-color" placeholder="Хүрэн, зэрэм..."></div>
+      <div class="field"><label>Үүлдэр</label><input class="inp" id="mr-breed" placeholder="Монгол..."></div>
+    </div>
+    <div class="fg c2">
+      <div class="field"><label>Ирсэн огноо</label><input class="inp" id="mr-arrived" type="date"></div>
+      <div class="field"><label>Ороо статус</label>
+        <select class="inp" id="mr-estrus">
+          <option value="unknown">Тодорхойгүй</option>
+          <option value="in">Ороонд орсон</option>
+          <option value="out">Ороонд ороогүй</option>
+        </select>
+      </div>
+    </div>
+    <div class="field" style="margin-bottom:10px"><label>Тэмдэглэл</label><textarea class="inp" id="mr-note" rows="2"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-add-mare')">Болих</button>
+      <button class="btn btn-primary" onclick="saveMare()">Бүртгэх</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD SCHEDULE ── -->
+<div class="modal-overlay" id="modal-add-schedule" style="display:none" onclick="if(event.target===this)closeModal('modal-add-schedule')">
+  <div class="modal">
+    <div class="modal-title">Үзлэг товлох <button class="modal-close" onclick="closeModal('modal-add-schedule')">×</button></div>
+    <div class="fg c2">
+      <div class="field"><label>Гүү <span class="req">*</span></label>
+        <select class="inp" id="sch-mare" onchange="onSchedMareChange()">
+          <option value="">— Гүү сонгох —</option>
+        </select>
+      </div>
+      <div class="field"><label>Үзлэгийн төрөл <span class="req">*</span></label>
+        <select class="inp" id="sch-type">
+          <option value="ЭХО — анхны үзлэг">ЭХО — анхны үзлэг</option>
+          <option value="ЭХО — дахин үзлэг">ЭХО — дахин үзлэг</option>
+          <option value="Ороо баталгаажуулах">Ороо баталгаажуулах</option>
+          <option value="Хээл баталгаажуулах">Хээл баталгаажуулах</option>
+          <option value="ЭХО1 — гишгүүлэлтийн дараа">ЭХО1 — гишгүүлэлтийн дараа</option>
+          <option value="Бусад">Бусад</option>
+        </select>
+      </div>
+    </div>
+    <div class="fg c2">
+      <div class="field"><label>Огноо <span class="req">*</span></label><input class="inp" id="sch-date" type="date"></div>
+      <div class="field"><label>Цаг</label><input class="inp" id="sch-time" type="time"></div>
+    </div>
+    <div class="field" style="margin-bottom:8px"><label>Азарга (харьяа)</label><input class="inp" id="sch-stallion-info" readonly style="color:var(--muted)"></div>
+    <div class="field" style="margin-bottom:10px"><label>Тэмдэглэл</label><textarea class="inp" id="sch-note" rows="2"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-add-schedule')">Болих</button>
+      <button class="btn btn-primary" onclick="saveSchedule()">Товлох</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── QUICK EXAM ── -->
+<div class="modal-overlay" id="modal-quick-exam" style="display:none" onclick="if(event.target===this)closeModal('modal-quick-exam')">
+  <div class="modal modal-lg">
+    <div class="modal-title">🩺 Яаралтай үзлэг / Товлосон үзлэг хийх <button class="modal-close" onclick="closeModal('modal-quick-exam')">×</button></div>
+    <div class="fg c2" style="margin-bottom:8px">
+      <div class="field"><label>Гүү <span class="req">*</span></label>
+        <select class="inp" id="qe-mare" onchange="onQEMareChange()"><option value="">— Гүү сонгох —</option></select>
+      </div>
+      <div class="field"><label>Огноо <span class="req">*</span></label><input class="inp" id="qe-date" type="date"></div>
+    </div>
+    <div class="fg c2" style="margin-bottom:8px">
+      <div class="field"><label>Үзлэгийн төрөл</label>
+        <select class="inp" id="qe-type">
+          <option value="ЭХО — анхны үзлэг">ЭХО — анхны үзлэг</option>
+          <option value="ЭХО — дахин үзлэг">ЭХО — дахин үзлэг</option>
+          <option value="Ороо баталгаажуулах">Ороо баталгаажуулах</option>
+          <option value="Хээл баталгаажуулах">Хээл баталгаажуулах</option>
+          <option value="ЭХО1 — гишгүүлэлтийн дараа">ЭХО1 — гишгүүлэлтийн дараа</option>
+          <option value="Яаралтай үзлэг">Яаралтай үзлэг</option>
+          <option value="Бусад">Бусад</option>
+        </select>
+      </div>
+      <div class="field"><label>Харьяа азарга</label><input class="inp" id="qe-stallion-info" readonly style="color:var(--muted)"></div>
+    </div>
+    <div class="divider"></div>
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Олдвор / Ороо шалгалт</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px" id="qe-findings"></div>
+    <div class="divider"></div>
+    <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px">Ороо орсон уу?</div>
+    <div style="display:flex;gap:8px;margin-bottom:12px">
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border:1.5px solid var(--line);border-radius:var(--r);font-size:13px;font-weight:600;transition:all .12s" id="qe-estrus-yes-lbl">
+        <input type="radio" name="qe-estrus" id="qe-estrus-yes" value="yes" onchange="onQEEstrusChange()" style="accent-color:var(--green2)"> ✅ Тийм — Ороонд орсон
+      </label>
+      <label style="display:flex;align-items:center;gap:6px;cursor:pointer;padding:8px 14px;border:1.5px solid var(--line);border-radius:var(--r);font-size:13px;font-weight:600;transition:all .12s" id="qe-estrus-no-lbl">
+        <input type="radio" name="qe-estrus" id="qe-estrus-no" value="no" onchange="onQEEstrusChange()" style="accent-color:var(--red2)"> ❌ Үгүй — Ороонд ороогүй
+      </label>
+    </div>
+    <!-- Ороонд орсон тохиолдолд -->
+    <div id="qe-estrus-yes-block" style="display:none">
+      <div class="info-block ib-green">✅ Ороонд орлоо — гишгүүлэлтийн хуваарь оруулах</div>
+      <div class="fg c2">
+        <div class="field"><label>Гишгүүлэх огноо <span class="req">*</span></label><input class="inp" id="qe-breed-date" type="date"></div>
+        <div class="field"><label>Гишгүүлэх цаг</label><input class="inp" id="qe-breed-time" type="time"></div>
+      </div>
+      <div class="field" style="margin-bottom:8px"><label>ЭХО1 товлох огноо (гишгүүлэлтийн дараа 16-18 хоног)</label><input class="inp" id="qe-echo1-date" type="date"></div>
+    </div>
+    <!-- Ороонд ороогүй тохиолдолд -->
+    <div id="qe-estrus-no-block" style="display:none">
+      <div class="info-block ib-amber">❌ Ороонд ороогүй — дараагийн үзлэг товлох</div>
+      <div class="fg c2">
+        <div class="field"><label>Дараагийн үзлэгийн огноо</label><input class="inp" id="qe-next-date" type="date"></div>
+        <div class="field"><label>Үзлэгийн төрөл</label>
+          <select class="inp" id="qe-next-type">
+            <option value="ЭХО — дахин үзлэг">ЭХО — дахин үзлэг</option>
+            <option value="Ороо баталгаажуулах">Ороо баталгаажуулах</option>
+            <option value="Бусад">Бусад</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="divider"></div>
+    <div class="field"><label>Эм / Эмчилгээ</label><input class="inp" id="qe-meds" placeholder="Лютал, Прогестерон, ПГ... (таслалаар)"></div>
+    <div class="field"><label>Тайлбар / Тэмдэглэл</label><textarea class="inp" id="qe-note" rows="2"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-quick-exam')">Болих</button>
+      <button class="btn btn-amber" onclick="saveExam(false)">💾 Хадгалах</button>
+      <button class="btn btn-primary" onclick="saveExam(true)">✓ Дуусгах & Хадгалах</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD BREEDING ── -->
+<div class="modal-overlay" id="modal-add-breeding" style="display:none" onclick="if(event.target===this)closeModal('modal-add-breeding')">
+  <div class="modal">
+    <div class="modal-title">Гишгүүлэлт бүртгэх <button class="modal-close" onclick="closeModal('modal-add-breeding')">×</button></div>
+    <div class="fg c2">
+      <div class="field"><label>Гүү <span class="req">*</span></label>
+        <select class="inp" id="br-mare" onchange="onBrMareChange()"><option value="">— Гүү сонгох —</option></select>
+      </div>
+      <div class="field"><label>Азарга <span class="req">*</span></label>
+        <select class="inp" id="br-stallion"><option value="">— Азарга сонгох —</option></select>
+      </div>
+    </div>
+    <div class="fg c2">
+      <div class="field"><label>Огноо <span class="req">*</span></label><input class="inp" id="br-date" type="date"></div>
+      <div class="field"><label>Цаг <span class="req">*</span></label><input class="inp" id="br-time" type="time"></div>
+    </div>
+    <div class="fg c2">
+      <div class="field"><label>ЭХО1 товлох огноо</label><input class="inp" id="br-echo1" type="date"></div>
+      <div class="field"><label>Гишгүүлэлтийн үнэ (₮)</label><input class="inp" id="br-price" type="number" placeholder="500000"></div>
+    </div>
+    <div class="field" style="margin-bottom:10px"><label>Тэмдэглэл</label><textarea class="inp" id="br-note" rows="2"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-add-breeding')">Болих</button>
+      <button class="btn btn-primary" onclick="saveBreeding()">Бүртгэх</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD INVOICE ── -->
+<div class="modal-overlay" id="modal-add-invoice" style="display:none" onclick="if(event.target===this)closeModal('modal-add-invoice')">
+  <div class="modal">
+    <div class="modal-title">Нэхэмжлэл үүсгэх <button class="modal-close" onclick="closeModal('modal-add-invoice')">×</button></div>
+    <div class="fg c2">
+      <div class="field"><label>Харилцагч <span class="req">*</span></label>
+        <select class="inp" id="inv-client" onchange="onInvClientChange()"><option value="">— Сонгох —</option></select>
+      </div>
+      <div class="field"><label>Огноо <span class="req">*</span></label><input class="inp" id="inv-date" type="date"></div>
+    </div>
+    <div id="inv-items-section">
+      <div style="font-size:12px;font-weight:600;color:var(--ink3);margin-bottom:6px">Нэхэмжлэлийн зүйлс</div>
+      <div id="inv-items"></div>
+      <button class="btn btn-sm" onclick="addInvItem()" style="margin-bottom:10px">+ Зүйл нэмэх</button>
+      <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--green-bg);border-radius:var(--r);font-weight:700">
+        <span>Нийт дүн:</span>
+        <span id="inv-total" class="mono" style="font-size:16px;color:var(--green)">₮0</span>
+      </div>
+    </div>
+    <div class="field" style="margin-top:10px"><label>Тэмдэглэл</label><textarea class="inp" id="inv-note" rows="2"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-add-invoice')">Болих</button>
+      <button class="btn btn-primary" onclick="saveInvoice()">Үүсгэх</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── ADD PAYMENT ── -->
+<div class="modal-overlay" id="modal-add-payment" style="display:none" onclick="if(event.target===this)closeModal('modal-add-payment')">
+  <div class="modal">
+    <div class="modal-title">Төлбөр бүртгэх <button class="modal-close" onclick="closeModal('modal-add-payment')">×</button></div>
+    <div class="fg c2">
+      <div class="field"><label>Нэхэмжлэл <span class="req">*</span></label>
+        <select class="inp" id="pay-invoice"><option value="">— Сонгох —</option></select>
+      </div>
+      <div class="field"><label>Огноо <span class="req">*</span></label><input class="inp" id="pay-date" type="date"></div>
+    </div>
+    <div class="fg c2">
+      <div class="field"><label>Дүн (₮) <span class="req">*</span></label><input class="inp" id="pay-amount" type="number" placeholder="0"></div>
+      <div class="field"><label>Төлбөрийн хэлбэр</label>
+        <select class="inp" id="pay-method">
+          <option value="Бэлэн">Бэлэн</option>
+          <option value="Карт">Карт</option>
+          <option value="Дансаар">Дансаар</option>
+          <option value="QPay">QPay</option>
+          <option value="Бусад">Бусад</option>
+        </select>
+      </div>
+    </div>
+    <div class="field"><label>Тэмдэглэл</label><textarea class="inp" id="pay-note" rows="2"></textarea></div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('modal-add-payment')">Болих</button>
+      <button class="btn btn-primary" onclick="savePayment()">Бүртгэх</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── MARE DETAIL ── -->
+<div class="modal-overlay" id="modal-mare-detail" style="display:none" onclick="if(event.target===this)closeModal('modal-mare-detail')">
+  <div class="modal modal-lg">
+    <div class="modal-title"><span id="md-title">Гүүний мэдээлэл</span><button class="modal-close" onclick="closeModal('modal-mare-detail')">×</button></div>
+    <div class="tabs" style="margin-bottom:14px">
+      <button class="tab-btn active" onclick="mdTab('info',this)">Мэдээлэл</button>
+      <button class="tab-btn" onclick="mdTab('exams',this)">Үзлэгүүд</button>
+      <button class="tab-btn" onclick="mdTab('breeding',this)">Гишгүүлэлт</button>
+      <button class="tab-btn" onclick="mdTab('finance',this)">Санхүү</button>
+    </div>
+    <div id="md-info"></div>
+    <div id="md-exams" style="display:none"></div>
+    <div id="md-breeding" style="display:none"></div>
+    <div id="md-finance" style="display:none"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="openExamForMare()">🩺 Үзлэг хийх</button>
+      <button class="btn btn-amber" onclick="openBreedingForMare()">🔗 Гишгүүлэлт</button>
+      <button class="btn btn-red" onclick="deleteMare()">🗑 Устгах</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── CLIENT DETAIL ── -->
+<div class="modal-overlay" id="modal-client-detail" style="display:none" onclick="if(event.target===this)closeModal('modal-client-detail')">
+  <div class="modal modal-lg">
+    <div class="modal-title"><span id="cd-title">Харилцагчийн мэдээлэл</span><button class="modal-close" onclick="closeModal('modal-client-detail')">×</button></div>
+    <div id="cd-body"></div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" onclick="openInvoiceForClient()">💰 Нэхэмжлэл</button>
+      <button class="btn btn-red" onclick="deleteClient()">🗑 Устгах</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── STALLION DETAIL ── -->
+<div class="modal-overlay" id="modal-stallion-detail" style="display:none" onclick="if(event.target===this)closeModal('modal-stallion-detail')">
+  <div class="modal modal-lg">
+    <div class="modal-title"><span id="sd-title">Азарганы мэдээлэл</span><button class="modal-close" onclick="closeModal('modal-stallion-detail')">×</button></div>
+    <div class="tabs" style="margin-bottom:14px">
+      <button class="tab-btn active" onclick="sdTab('info',this)">Мэдээлэл</button>
+      <button class="tab-btn" onclick="sdTab('mares',this)">Харьяа гүүнүүд</button>
+      <button class="tab-btn" onclick="sdTab('breeding',this)">Гишгүүлэлт</button>
+    </div>
+    <div id="sd-info"></div>
+    <div id="sd-mares" style="display:none"></div>
+    <div id="sd-breeding" style="display:none"></div>
+    <div class="modal-footer">
+      <button class="btn btn-red" onclick="deleteStallion()">🗑 Устгах</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+// ══════════════════════════════════════════════════════
+//  DATA STORE
+// ══════════════════════════════════════════════════════
+const FINDINGS = ['Олон жижиг фолликул','Томорсон фолликул','Хөгжиж байгаа уут','Биеллэг уут','Цист','Бохирдол','Үрэвсэл','Шингэн','Ороо — эрт','Ороо — дунд','Ороо — оройтсон','Хэвийн'];
+const GESTATION_DAYS = 340;
+let db = {
+  clients:[], stallions:[], mares:[], exams:[], breedings:[], invoices:[], payments:[], _id:1,
+  settings:{ apiUrl:'', priceBreeding:500000, priceExam:50000 }
+};
+
+function nextId(){ return db._id++; }
+function todayStr(){ return new Date().toISOString().split('T')[0]; }
+function tomorrowStr(){ const d=new Date();d.setDate(d.getDate()+1);return d.toISOString().split('T')[0]; }
+function dateAddDays(dateStr,days){ const d=new Date(dateStr);d.setDate(d.getDate()+days);return d.toISOString().split('T')[0]; }
+function fmtMoney(n){ return '₮'+(n||0).toLocaleString('mn-MN'); }
+function fmtDate(s){ if(!s)return '—'; const d=new Date(s); return d.toLocaleDateString('mn-MN',{year:'numeric',month:'short',day:'numeric'}); }
+
+function saveDB(){
+  try{ localStorage.setItem('morton_db_v2', JSON.stringify(db)); }catch(e){}
+}
+function loadDB(){
+  try{
+    const s=localStorage.getItem('morton_db_v2');
+    if(s){ const d=JSON.parse(s); Object.assign(db,d); }
+  }catch(e){}
+  // syncQueue өмнөх хувилбараас үлдсэн бол баталгаажуулна
+  if(!Array.isArray(db.syncQueue)) db.syncQueue=[];
+}
+
+// ══════════════════════════════════════════════════════
+//  SYNC QUEUE — офлайн үйлдлийн дараалал
+// ══════════════════════════════════════════════════════
+// Бүх бүртгэл, засвар энд хадгалагдаж, интернэт орох үед дамжуулагдана
+function queueSync(method, path, body){
+  if(!Array.isArray(db.syncQueue)) db.syncQueue=[];
+  db.syncQueue.push({ method, path, body, ts: Date.now(), retries: 0 });
+  saveDB();
+  updateSyncIndicator();
+  // Интернэт байвал шууд оролдоно
+  if(navigator.onLine && apiBase()) flushQueue();
+}
+
+let _flushing = false;
+async function flushQueue(){
+  if(_flushing || !apiBase() || !navigator.onLine) return;
+  if(!db.syncQueue || !db.syncQueue.length){ updateSyncIndicator(); return; }
+  _flushing = true;
+  updateSyncIndicator('syncing');
+  const MAX_RETRIES = 3;
+  let i = 0;
+  while(i < db.syncQueue.length){
+    const op = db.syncQueue[i];
+    try{
+      await apiCall(op.path, op.method, op.body || null);
+      db.syncQueue.splice(i, 1); // амжилттай → устгана
+      saveDB();
+    } catch(e){
+      op.retries = (op.retries||0) + 1;
+      if(op.retries >= MAX_RETRIES){
+        op._failed = true; // байнга алдаатай бол тэмдэглэнэ, алгасана
+        i++;
+      } else {
+        await new Promise(r=>setTimeout(r, 1200 * op.retries)); // хойшлуулна
+        i++;
+      }
+    }
+  }
+  _flushing = false;
+  saveDB();
+  updateSyncIndicator();
+  if(db.syncQueue.filter(o=>!o._failed).length === 0){
+    const failCount = db.syncQueue.filter(o=>o._failed).length;
+    if(failCount === 0) toast('Sync амжилттай ✓','ok');
+    else toast(`${failCount} үйлдэл дамжуулагдсангүй — дараагийн удаа дахин оролдоно`,'');
+  }
+}
+
+function updateSyncIndicator(state){
+  const pending = (db.syncQueue||[]).filter(o=>!o._failed).length;
+  const el = document.getElementById('sync-status-badge');
+  if(!el) return;
+  if(state==='syncing'){
+    el.textContent='⟳ Sync...'; el.style.background='var(--blue-bg)'; el.style.color='var(--blue2)'; el.style.display='inline-block';
+  } else if(pending > 0){
+    el.textContent=`⏳ ${pending} хүлээж буй`; el.style.background='var(--amber-bg)'; el.style.color='var(--amber)'; el.style.display='inline-block';
+  } else {
+    el.style.display='none';
+  }
+}
+
+// Интернэт орох үед автомат flush
+window.addEventListener('online', ()=>{
+  toast('Интернэт холбогдлоо — sync эхэлнэ...','ok');
+  if(apiBase()) setTimeout(flushQueue, 800);
+});
+window.addEventListener('offline', ()=>{ toast('Интернэтгүй горим — бүртгэл хадгалагдана',''); updateSyncIndicator(); });
+
+// Sync дарааллын мэдээлэл харах/цэвэрлэх
+function showSyncQueue(){
+  const q = (db.syncQueue||[]);
+  if(!q.length){ toast('Дараалал хоосон — бүгд sync хийгдсэн ✓','ok'); return; }
+  const msg = q.map((o,i)=>`${i+1}. ${o.method} ${o.path}${o._failed?' ❌':o.retries?' ⚠️':''}`).join('\n');
+  alert(`Sync дараалал (${q.length}):\n${msg}`);
+}
+function retrySyncQueue(){
+  db.syncQueue = (db.syncQueue||[]).map(o=>({...o,_failed:false,retries:0}));
+  saveDB(); flushQueue();
+  toast('Дахин оролдож байна...','');
+}
+function clearSyncQueue(){
+  if(!confirm('Sync дараалалыг цэвэрлэх үү? Sheets-рүү дамжуулаагүй өгөгдөл алдагдана.')) return;
+  db.syncQueue=[];
+  saveDB(); updateSyncIndicator();
+  toast('Дараалал цэвэрлэгдлээ');
+}
+function apiBase(){ return db.settings.apiUrl||''; }
+async function apiCall(path,method='GET',body=null){
+  const base=apiBase(); if(!base) throw new Error('API URL тохируулагдаагүй');
+  const url = base + (base.includes('?')?'&':'?') + 'path=' + encodeURIComponent(path);
+  const opts = { method, headers:{'Content-Type':'application/json'} };
+  if(body) opts.body=JSON.stringify(body);
+  const r = await fetch(url, opts);
+  if(!r.ok) throw new Error('HTTP '+r.status);
+  return r.json();
+}
+async function apiPost(path,body){ return apiCall(path,'POST',body); }
+async function apiPut(path,body){ return apiCall(path,'PUT',body); }
+async function apiDelete(path){ return apiCall(path,'DELETE'); }
+
+async function syncFromSheets(){
+  const base=apiBase(); if(!base){ toast('API URL тохируулна уу','err'); return; }
+  toast('Татаж байна...');
+  try{
+    const data = await apiCall('/sync','GET');
+    if(data.clients) db.clients=data.clients;
+    if(data.stallions) db.stallions=data.stallions;
+    if(data.mares) db.mares=data.mares;
+    if(data.exams) db.exams=data.exams;
+    if(data.breedings) db.breedings=data.breedings;
+    if(data.invoices) db.invoices=data.invoices;
+    if(data.payments) db.payments=data.payments;
+    if(data._id) db._id=data._id;
+    saveDB(); refreshAll(); toast('Амжилттай татагдлаа ✓','ok');
+  }catch(e){ toast('Алдаа: '+e.message,'err'); }
+}
+
+async function testConnection(){
+  const base=apiBase(); if(!base){ toast('URL оруулна уу','err'); return; }
+  try{
+    const r=await apiCall('/ping');
+    document.getElementById('conn-result').style.display='block';
+    document.getElementById('conn-result').innerHTML=`<div class="info-block ib-green">✓ Холболт амжилттай: ${JSON.stringify(r)}</div>`;
+    toast('Холбогдлоо ✓','ok');
+  }catch(e){
+    document.getElementById('conn-result').style.display='block';
+    document.getElementById('conn-result').innerHTML=`<div class="info-block" style="background:var(--red-bg);color:var(--red2);border:1px solid var(--red-line)">✗ Алдаа: ${e.message}</div>`;
+  }
+}
+
+// ══════════════════════════════════════════════════════
+//  NAV
+// ══════════════════════════════════════════════════════
+let _curScreen = 'dashboard';
+function nav(screen){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.querySelectorAll('.bn-i').forEach(b=>b.classList.remove('active'));
+  document.getElementById('screen-'+screen).classList.add('active');
+  document.querySelectorAll(`.nav-item[onclick*="'${screen}'"]`).forEach(n=>n.classList.add('active'));
+  const bni=document.getElementById('bni-'+screen);
+  if(bni) bni.classList.add('active');
+  _curScreen=screen;
+  renderScreen(screen);
+}
+function renderScreen(s){
+  if(s==='dashboard') renderDashboard();
+  else if(s==='clients') renderClients();
+  else if(s==='stallions') renderStallions();
+  else if(s==='mares') renderMares();
+  else if(s==='schedule') renderSchedule('today');
+  else if(s==='breeding') renderBreeding('pending');
+  else if(s==='pregnancy') renderPregnancy();
+  else if(s==='finance') renderFinance('invoices');
+  else if(s==='reports') renderReports();
+  else if(s==='settings') loadSettings();
+}
+
+// ══════════════════════════════════════════════════════
+//  MODAL HELPERS
+// ══════════════════════════════════════════════════════
+function openModal(id){ document.getElementById(id).style.display='flex'; }
+function closeModal(id){ document.getElementById(id).style.display='none'; }
+function openDrawer(){
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer-overlay').classList.add('open');
+  // setTimeout prevents the same click event from immediately closing it
+  setTimeout(()=>{ _drawerJustOpened=false; }, 50);
+  _drawerJustOpened=true;
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+let _drawerJustOpened=false;
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ document.querySelectorAll('.modal-overlay').forEach(m=>m.style.display='none'); closeDrawer(); }});
+
+let _toastTimer=null;
+function toast(msg,type=''){
+  const el=document.getElementById('toast');
+  el.textContent=msg; el.className='show'+(type?' '+type:'');
+  if(_toastTimer) clearTimeout(_toastTimer);
+  _toastTimer=setTimeout(()=>el.className='',2800);
+}
+
+// ══════════════════════════════════════════════════════
+//  UPDATE BADGES & TOPBAR
+// ══════════════════════════════════════════════════════
+function updateBadges(){
+  const today=todayStr();
+  const pendingSched=db.exams.filter(e=>!e.done&&e.date>=today).length;
+  const pendingBreed=db.breedings.filter(b=>!b.done).length;
+  const pregCount=db.mares.filter(m=>m.pregnant).length;
+  document.getElementById('nb-clients').textContent=db.clients.length;
+  document.getElementById('nb-stallions').textContent=db.stallions.length;
+  document.getElementById('nb-mares').textContent=db.mares.length;
+  document.getElementById('nb-schedule').textContent=pendingSched;
+  document.getElementById('nb-breeding').textContent=pendingBreed;
+  document.getElementById('nb-pregnancy').textContent=pregCount;
+  document.getElementById('ts-clients').textContent=db.clients.length;
+  document.getElementById('ts-mares').textContent=db.mares.length;
+  document.getElementById('ts-pending').textContent=pendingSched+pendingBreed;
+  // Bottom nav dots
+  const dSched=document.getElementById('bni-dot-schedule');
+  const dBreed=document.getElementById('bni-dot-breeding');
+  if(dSched) dSched.classList.toggle('show', db.exams.filter(e=>!e.done&&e.date===today).length>0);
+  if(dBreed) dBreed.classList.toggle('show', pendingBreed>0);
+}
+function refreshAll(){ updateBadges(); renderScreen(_curScreen); }
+
+// ══════════════════════════════════════════════════════
+//  DASHBOARD
+// ══════════════════════════════════════════════════════
+function renderDashboard(){
+  document.getElementById('dash-date').textContent = new Date().toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+  const today=todayStr(), tom=tomorrowStr();
+  const todayExams=db.exams.filter(e=>e.date===today);
+  const tomExams=db.exams.filter(e=>e.date===tom&&!e.done);
+  const pendingBreed=db.breedings.filter(b=>!b.done);
+  const pregCount=db.mares.filter(m=>m.pregnant).length;
+  const totalInv=db.invoices.reduce((s,i)=>s+i.total,0);
+  const totalPaid=db.payments.reduce((s,p)=>s+p.amount,0);
+
+  document.getElementById('dash-stats').innerHTML = [
+    {label:'Гүүнүүд нийт',val:db.mares.length,sub:`${db.clients.length} харилцагч`,color:'var(--green2)'},
+    {label:'Өнөөдрийн үзлэг',val:todayExams.length,sub:`${todayExams.filter(e=>!e.done).length} хүлээгдэж буй`,color:'var(--blue2)'},
+    {label:'Гишгүүлэх хүлээж буй',val:pendingBreed.length,sub:'Ороо орсон гүүнүүд',color:'var(--amber2)'},
+    {label:'Хээлтэй гүүнүүд',val:pregCount,sub:`${db.mares.length} гүүнээс`,color:'var(--green2)'},
+  ].map(s=>`<div class="stat-card"><div class="stat-accent" style="background:${s.color}"></div><div class="stat-label">${s.label}</div><div class="stat-value" style="color:${s.color}">${s.val}</div><div class="stat-sub">${s.sub}</div></div>`).join('');
+
+  document.getElementById('dash-today').innerHTML = todayExams.length
+    ? todayExams.map(e=>scheduleItem(e)).join('')
+    : '<div class="empty"><div class="empty-icon">☀️</div><div class="empty-text">Өнөөдөр үзлэг байхгүй</div></div>';
+
+  document.getElementById('dash-tomorrow').innerHTML = tomExams.length
+    ? tomExams.map(e=>scheduleItem(e)).join('')
+    : '<div style="font-size:12px;color:var(--muted);padding:8px 0;text-align:center">Маргааш үзлэг байхгүй</div>';
+
+  document.getElementById('dash-pending-breed').innerHTML = pendingBreed.length
+    ? pendingBreed.slice(0,6).map(b=>`<div class="list-item" onclick="openBreedingModal(${b.id})">
+        <div class="li-av" style="background:var(--gold-bg);color:var(--gold)">♀</div>
+        <div class="li-info"><div class="li-name">${b.mareName}</div><div class="li-sub">♂ ${b.stallionName} · ${fmtDate(b.scheduledDate)}</div></div>
+        <button class="btn btn-xs btn-primary" onclick="event.stopPropagation();quickBreedDone(${b.id})">✓ Хийгдлээ</button>
+      </div>`).join('')
+    : '<div class="empty"><div class="empty-text">Гишгүүлэх хүлээж буй гүү байхгүй</div></div>';
+
+  const recent = [
+    ...db.exams.map(e=>({...e,_type:'exam',_date:e.date})),
+    ...db.breedings.map(b=>({...b,_type:'breed',_date:b.date||b.scheduledDate})),
+  ].sort((a,b)=>b._date?.localeCompare(a._date||'')).slice(0,8);
+  document.getElementById('dash-recent').innerHTML = recent.length
+    ? recent.map(r=>r._type==='exam'
+        ? `<div class="list-item" onclick="openExamDetail(${r.id})"><div class="li-av" style="background:var(--blue-bg);color:var(--blue2)">🩺</div><div class="li-info"><div class="li-name">${r.mareName}</div><div class="li-sub">${r.type} · ${fmtDate(r.date)}</div></div><span class="badge ${r.done?'b-green':'b-amber'}">${r.done?'Дууссан':'Хүлээгдэж буй'}</span></div>`
+        : `<div class="list-item"><div class="li-av" style="background:var(--gold-bg);color:var(--gold)">🔗</div><div class="li-info"><div class="li-name">${r.mareName}</div><div class="li-sub">♂ ${r.stallionName} · ${fmtDate(r.date||r.scheduledDate)}</div></div><span class="badge ${r.done?'b-green':'b-amber'}">${r.done?'Дууссан':'Товлосон'}</span></div>`
+      ).join('')
+    : '<div class="empty"><div class="empty-text">Бүртгэл байхгүй</div></div>';
+}
+
+// ══════════════════════════════════════════════════════
+//  CLIENTS
+// ══════════════════════════════════════════════════════
+function renderClients(){
+  const q=(document.getElementById('client-search')?.value||'').toLowerCase();
+  const list=db.clients.filter(c=>!q||c.name.toLowerCase().includes(q)||c.phone?.includes(q)||c.org?.toLowerCase().includes(q));
+  document.getElementById('client-list').innerHTML = list.length
+    ? list.map(c=>{
+        const mares=db.mares.filter(m=>m.clientId===c.id);
+        const totalInv=db.invoices.filter(i=>i.clientId===c.id).reduce((s,i)=>s+i.total,0);
+        const totalPaid=db.payments.filter(p=>p.clientId===c.id).reduce((s,p)=>s+p.amount,0);
+        const outstanding=totalInv-totalPaid;
+        return `<div class="list-item" onclick="openClientDetail(${c.id})">
+          <div class="li-av" style="background:var(--surface2);color:var(--ink);font-size:20px;font-weight:700">${c.name[0]}</div>
+          <div class="li-info">
+            <div class="li-name">${c.name} ${c.org?'<span class="chip">'+c.org+'</span>':''}</div>
+            <div class="li-sub">${c.phone||'—'} · ${mares.length} гүү</div>
+          </div>
+          <div class="li-r">
+            ${outstanding>0?`<span class="badge b-amber">₮${outstanding.toLocaleString()}</span>`:'<span class="badge b-green">Тооцоо дутуугүй</span>'}
+            <span class="muted" style="font-size:11px">${fmtDate(c.createdAt)}</span>
+          </div>
+        </div>`;
+      }).join('')
+    : '<div class="empty"><div class="empty-icon">👤</div><div class="empty-text">Харилцагч байхгүй</div></div>';
+}
+
+function saveClient(){
+  const name=document.getElementById('cl-name').value.trim();
+  const phone=document.getElementById('cl-phone').value.trim();
+  if(!name||!phone){ toast('Нэр, утасны дугаарыг оруулна уу','err'); return; }
+  const c={id:nextId(),name,phone,org:document.getElementById('cl-org').value.trim(),reg:document.getElementById('cl-reg').value.trim(),addr:document.getElementById('cl-addr').value.trim(),note:document.getElementById('cl-note').value.trim(),createdAt:todayStr()};
+  db.clients.push(c);
+  saveDB(); updateBadges(); renderClients();
+  populateAllDropdowns();
+  closeModal('modal-add-client');
+  ['cl-name','cl-phone','cl-org','cl-reg','cl-addr','cl-note'].forEach(id=>document.getElementById(id).value='');
+  toast('Харилцагч нэмэгдлээ ✓','ok');
+  queueSync('POST','/clients',c);
+}
+
+let _curClientId=null;
+function openClientDetail(id){
+  _curClientId=id;
+  const c=db.clients.find(x=>x.id===id); if(!c) return;
+  document.getElementById('cd-title').textContent='👤 '+c.name;
+  const mares=db.mares.filter(m=>m.clientId===id);
+  const invs=db.invoices.filter(i=>i.clientId===id);
+  const totalInv=invs.reduce((s,i)=>s+i.total,0);
+  const totalPaid=db.payments.filter(p=>p.clientId===id).reduce((s,p)=>s+p.amount,0);
+  document.getElementById('cd-body').innerHTML=`
+    <div class="g2" style="margin-bottom:14px">
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:2px">Утас</div><div style="font-weight:600">${c.phone||'—'}</div></div>
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:2px">Байгууллага</div><div style="font-weight:600">${c.org||'—'}</div></div>
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:2px">Регистр</div><div style="font-weight:600 ;font-family:var(--mono)">${c.reg||'—'}</div></div>
+      <div><div style="font-size:11px;color:var(--muted);margin-bottom:2px">Хаяг</div><div style="font-weight:600">${c.addr||'—'}</div></div>
+    </div>
+    <div class="g3" style="margin-bottom:14px">
+      <div class="stat-card"><div class="stat-label">Гүүнүүд</div><div class="stat-value">${mares.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Нийт нэхэмжлэл</div><div class="stat-value mono" style="font-size:16px">${fmtMoney(totalInv)}</div></div>
+      <div class="stat-card"><div class="stat-label">Үлдэгдэл</div><div class="stat-value mono" style="font-size:16px;color:${totalInv-totalPaid>0?'var(--amber2)':'var(--green2)'}">${fmtMoney(totalInv-totalPaid)}</div></div>
+    </div>
+    <div class="card-title">Гүүнүүд</div>
+    ${mares.map(m=>{
+      const s=db.stallions.find(x=>x.id===m.stallionId);
+      return `<div class="list-item" onclick="openMareDetail(${m.id})">
+        <div class="li-av" style="background:var(--gold-bg);color:var(--gold)">♀</div>
+        <div class="li-info"><div class="li-name">${m.name}</div><div class="li-sub">♂ ${s?s.name:'—'} · ${m.color||'—'}</div></div>
+        <span class="badge ${m.pregnant?'b-green':m.estrus==='in'?'b-amber':'b-gray'}">${m.pregnant?'Хээлтэй':m.estrus==='in'?'Ороонд':'Хэвийн'}</span>
+      </div>`;
+    }).join('') || '<div class="empty"><div class="empty-text">Гүү байхгүй</div></div>'}`;
+  openModal('modal-client-detail');
+}
+function openInvoiceForClient(){
+  closeModal('modal-client-detail');
+  populateInvClient(_curClientId);
+  openModal('modal-add-invoice');
+}
+function deleteClient(){
+  if(!confirm('Харилцагч болон түүний бүх мэдээллийг устгах уу?')) return;
+  db.clients=db.clients.filter(c=>c.id!==_curClientId);
+  db.mares=db.mares.filter(m=>m.clientId!==_curClientId);
+  saveDB(); updateBadges(); renderClients(); closeModal('modal-client-detail'); toast('Устгагдлаа');
+}
+
+// ══════════════════════════════════════════════════════
+//  STALLIONS
+// ══════════════════════════════════════════════════════
+function renderStallions(){
+  document.getElementById('stallion-list').innerHTML = db.stallions.length
+    ? db.stallions.map(s=>{
+        const mares=db.mares.filter(m=>m.stallionId===s.id);
+        const breeds=db.breedings.filter(b=>b.stallionId===s.id);
+        const pregMares=mares.filter(m=>m.pregnant).length;
+        return `<div class="card" style="cursor:pointer" onclick="openStallionDetail(${s.id})">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px">
+            <div>
+              <div style="font-size:16px;font-weight:800;color:var(--blue)">♂ ${s.name}</div>
+              <div style="font-size:12px;color:var(--muted)">${s.breed||'—'} · ${s.color||'—'} · ${s.year?s.year+'он':'—'}</div>
+            </div>
+            ${s.chip?`<span class="chip mono">${s.chip}</span>`:''}
+          </div>
+          <div class="g3">
+            <div style="text-align:center;padding:8px;background:var(--blue-bg);border-radius:var(--r)">
+              <div style="font-size:18px;font-weight:800;color:var(--blue2);font-family:var(--mono)">${mares.length}</div>
+              <div style="font-size:10px;color:var(--muted)">Харьяа гүү</div>
+            </div>
+            <div style="text-align:center;padding:8px;background:var(--gold-bg);border-radius:var(--r)">
+              <div style="font-size:18px;font-weight:800;color:var(--gold);font-family:var(--mono)">${breeds.length}</div>
+              <div style="font-size:10px;color:var(--muted)">Гишгүүлэлт</div>
+            </div>
+            <div style="text-align:center;padding:8px;background:var(--green-bg);border-radius:var(--r)">
+              <div style="font-size:18px;font-weight:800;color:var(--green2);font-family:var(--mono)">${pregMares}</div>
+              <div style="font-size:10px;color:var(--muted)">Хээлтэй</div>
+            </div>
+          </div>
+        </div>`;
+      }).join('')
+    : '<div class="card"><div class="empty"><div class="empty-icon">♂</div><div class="empty-text">Азарга бүртгэгдээгүй байна</div></div></div>';
+}
+
+function saveStallion(){
+  const name=document.getElementById('st-name').value.trim();
+  if(!name){ toast('Нэрийг оруулна уу','err'); return; }
+  const s={id:nextId(),name,chip:document.getElementById('st-chip').value.trim(),year:parseInt(document.getElementById('st-year').value)||null,color:document.getElementById('st-color').value.trim(),breed:document.getElementById('st-breed').value.trim(),weight:parseInt(document.getElementById('st-weight').value)||null,height:parseInt(document.getElementById('st-height').value)||null,note:document.getElementById('st-note').value.trim(),createdAt:todayStr()};
+  db.stallions.push(s);
+  saveDB(); updateBadges(); renderStallions();
+  closeModal('modal-add-stallion');
+  ['st-name','st-chip','st-year','st-color','st-breed','st-weight','st-height','st-note'].forEach(id=>document.getElementById(id).value='');
+  toast('Азарга нэмэгдлээ ✓','ok');
+  queueSync('POST','/stallions',s);
+  populateAllDropdowns();
+}
+
+let _curStallionId = null;
+
+function openStallionDetail(id){
+  _curStallionId = id;
+  const s = db.stallions.find(x=>x.id===id); if(!s) return;
+  const mares = db.mares.filter(m=>m.stallionId===id);
+  const breeds = db.breedings.filter(b=>b.stallionId===id&&b.done);
+  const pregMares = mares.filter(m=>m.pregnant);
+  const pregRate = breeds.length ? Math.round(pregMares.length/breeds.length*100) : 0;
+  document.getElementById('sd-title').textContent = '♂ ' + s.name;
+
+  // Info tab
+  document.getElementById('sd-info').innerHTML = `
+    <div class="g3 stats-row" style="margin-bottom:14px">
+      <div class="stat-card"><div class="stat-label">Харьяа гүү</div><div class="stat-value" style="color:var(--blue2)">${mares.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Гишгүүлэлт</div><div class="stat-value" style="color:var(--gold)">${breeds.length}</div></div>
+      <div class="stat-card"><div class="stat-label">Хээлтэй</div><div class="stat-value" style="color:var(--green2)">${pregMares.length}<span style="font-size:14px;font-weight:500;color:var(--muted)"> / ${pregRate}%</span></div></div>
+    </div>
+    <div class="g2" style="margin-bottom:14px">
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Үүлдэр</div><div style="font-weight:600">${s.breed||'—'}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Өнгө</div><div style="font-weight:600">${s.color||'—'}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Төрсөн он</div><div style="font-weight:600">${s.year?s.year+' он':'—'}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Чип</div><div style="font-weight:600;font-family:var(--mono)">${s.chip||'—'}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Жин</div><div style="font-weight:600">${s.weight?s.weight+' кг':'—'}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Өндөр</div><div style="font-weight:600">${s.height?s.height+' см':'—'}</div></div>
+    </div>
+    ${s.note?`<div class="info-block ib-blue">${s.note}</div>`:''}`;
+
+  // Mares tab
+  document.getElementById('sd-mares').innerHTML = mares.length
+    ? mares.map(m=>{
+        const c = db.clients.find(x=>x.id===m.clientId);
+        const lastExam = db.exams.filter(e=>e.mareId===m.id&&e.done).sort((a,b)=>b.date.localeCompare(a.date))[0];
+        const nextExam = db.exams.filter(e=>e.mareId===m.id&&!e.done&&e.date>=todayStr()).sort((a,b)=>a.date.localeCompare(b.date))[0];
+        return `<div class="list-item" onclick="closeModal('modal-stallion-detail');openMareDetail(${m.id})">
+          <div class="li-av" style="background:var(--gold-bg);color:var(--gold);font-size:18px">♀</div>
+          <div class="li-info">
+            <div class="li-name">${m.name} ${c?`<span class="chip">${c.name}</span>`:''}</div>
+            <div class="li-sub">${m.color||'—'} · ${m.chip?'Чип: '+m.chip:'Чипгүй'}${m.arrived?' · Ирсэн: '+fmtDate(m.arrived):''}</div>
+            ${nextExam?`<div style="font-size:10px;color:var(--blue2);margin-top:2px">📅 Дараагийн: ${nextExam.type} — ${fmtDate(nextExam.date)}</div>`:''}
+          </div>
+          <div class="li-r">
+            <span class="badge ${m.pregnant?'b-green':m.estrus==='in'?'b-amber':'b-gray'}">${m.pregnant?'🤰 Хээлтэй':m.estrus==='in'?'🔴 Ороонд':'⬜ Хэвийн'}</span>
+            ${lastExam?`<span class="muted" style="font-size:10px">Сүүлийн: ${fmtDate(lastExam.date)}</span>`:'<span class="muted" style="font-size:10px">Үзлэг хийгдэлгүй</span>'}
+          </div>
+        </div>`;
+      }).join('')
+    : `<div class="empty"><div class="empty-icon">♀</div><div class="empty-text">Харьяа гүү бүртгэгдээгүй байна</div></div>`;
+
+  // Breeding tab
+  document.getElementById('sd-breeding').innerHTML = breeds.length
+    ? breeds.sort((a,b)=>b.date.localeCompare(a.date)).map(b=>{
+        const m = db.mares.find(x=>x.id===b.mareId);
+        const c = m ? db.clients.find(x=>x.id===m.clientId) : null;
+        return `<div class="list-item">
+          <div class="li-av" style="background:var(--gold-bg);color:var(--gold)">🔗</div>
+          <div class="li-info">
+            <div class="li-name">♀ ${b.mareName} ${c?`<span class="chip">${c.name}</span>`:''}</div>
+            <div class="li-sub">${fmtDate(b.date)} ${b.time?'· '+b.time:''}</div>
+          </div>
+          <div class="li-r">
+            ${m?.pregnant?`<span class="badge b-green">🤰 Хээлтэй</span>`:'<span class="badge b-gray">—</span>'}
+            ${b.price?`<span class="muted" style="font-size:11px">${fmtMoney(b.price)}</span>`:''}
+          </div>
+        </div>`;
+      }).join('')
+    : `<div class="empty"><div class="empty-icon">🔗</div><div class="empty-text">Гишгүүлэлтийн бүртгэл байхгүй</div></div>`;
+
+  // Reset to info tab
+  sdTab('info', document.querySelector('#modal-stallion-detail .tab-btn'));
+  openModal('modal-stallion-detail');
+}
+
+function sdTab(tab, btn){
+  ['info','mares','breeding'].forEach(t=>{
+    document.getElementById('sd-'+t).style.display = t===tab ? 'block' : 'none';
+  });
+  document.querySelectorAll('#modal-stallion-detail .tab-btn').forEach(b=>b.classList.remove('active'));
+  if(btn) btn.classList.add('active');
+}
+
+function deleteStallion(){
+  if(!confirm('Азарга болон түүний бүх мэдээллийг устгах уу?')) return;
+  db.stallions = db.stallions.filter(s=>s.id!==_curStallionId);
+  saveDB(); updateBadges(); renderStallions();
+  closeModal('modal-stallion-detail');
+  toast('Устгагдлаа');
+}
+
+// ══════════════════════════════════════════════════════
+//  MARES
+// ══════════════════════════════════════════════════════
+function renderMares(){
+  const q=(document.getElementById('mare-search')?.value||'').toLowerCase();
+  const fc=document.getElementById('mare-filter-client')?.value||'';
+  const fs=document.getElementById('mare-filter-stallion')?.value||'';
+  let list=db.mares.filter(m=>{
+    if(q && !m.name.toLowerCase().includes(q)) return false;
+    if(fc && m.clientId!=fc) return false;
+    if(fs && m.stallionId!=fs) return false;
+    return true;
+  });
+  document.getElementById('mare-list').innerHTML = list.length
+    ? list.map(m=>{
+        const s=db.stallions.find(x=>x.id===m.stallionId);
+        const c=db.clients.find(x=>x.id===m.clientId);
+        const lastExam=db.exams.filter(e=>e.mareId===m.id).sort((a,b)=>b.date.localeCompare(a.date))[0];
+        const nextExam=db.exams.filter(e=>e.mareId===m.id&&!e.done&&e.date>=todayStr()).sort((a,b)=>a.date.localeCompare(b.date))[0];
+        return `<div class="list-item" onclick="openMareDetail(${m.id})">
+          <div class="li-av" style="background:var(--gold-bg);color:var(--gold);font-size:18px">♀</div>
+          <div class="li-info">
+            <div class="li-name">${m.name} <span class="chip">${c?c.name:'—'}</span></div>
+            <div class="li-sub">♂ ${s?s.name:'—'} · ${m.color||'—'} · ${m.chip?'Чип:'+m.chip:''}</div>
+            ${nextExam?`<div style="font-size:10px;color:var(--blue2);margin-top:2px">📅 ${nextExam.type} — ${fmtDate(nextExam.date)}</div>`:''}
+          </div>
+          <div class="li-r">
+            <span class="badge ${m.pregnant?'b-green':m.estrus==='in'?'b-amber':'b-gray'}">${m.pregnant?'🤰 Хээлтэй':m.estrus==='in'?'🔴 Ороонд':'⬜ Хэвийн'}</span>
+            ${lastExam?`<span class="muted" style="font-size:10px">Сүүлийн: ${fmtDate(lastExam.date)}</span>`:''}
+          </div>
+        </div>`;
+      }).join('')
+    : '<div class="empty"><div class="empty-icon">♀</div><div class="empty-text">Гүү байхгүй</div></div>';
+}
+
+function openAddMareModal(){
+  populateMareDropdowns();
+  openModal('modal-add-mare');
+}
+
+function populateMareDropdowns(){
+  const mrClient=document.getElementById('mr-client');
+  const mrStallion=document.getElementById('mr-stallion');
+  if(mrClient){ mrClient.innerHTML='<option value="">— Харилцагч сонгох —</option>'+db.clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''); }
+  if(mrStallion){ mrStallion.innerHTML='<option value="">— Азарга сонгох —</option>'+db.stallions.map(s=>`<option value="${s.id}">${s.name}</option>`).join(''); }
+  const mfc=document.getElementById('mare-filter-client');
+  if(mfc){ mfc.innerHTML='<option value="">Бүх харилцагч</option>'+db.clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''); }
+  const mfs=document.getElementById('mare-filter-stallion');
+  if(mfs){ mfs.innerHTML='<option value="">Бүх азарга</option>'+db.stallions.map(s=>`<option value="${s.id}">${s.name}</option>`).join(''); }
+}
+
+function saveMare(){
+  const name=document.getElementById('mr-name').value.trim();
+  const clientId=parseInt(document.getElementById('mr-client').value);
+  const stallionId=parseInt(document.getElementById('mr-stallion').value);
+  if(!name||!clientId||!stallionId){ toast('Нэр, харилцагч, азаргыг сонгоно уу','err'); return; }
+  const c=db.clients.find(x=>x.id===clientId);
+  const s=db.stallions.find(x=>x.id===stallionId);
+  const m={id:nextId(),name,clientId,clientName:c?.name||'',stallionId,stallionName:s?.name||'',chip:document.getElementById('mr-chip').value.trim(),year:parseInt(document.getElementById('mr-year').value)||null,color:document.getElementById('mr-color').value.trim(),breed:document.getElementById('mr-breed').value.trim(),arrived:document.getElementById('mr-arrived').value,estrus:document.getElementById('mr-estrus').value,pregnant:false,note:document.getElementById('mr-note').value.trim(),createdAt:todayStr()};
+  db.mares.push(m);
+  saveDB(); updateBadges(); renderMares();
+  closeModal('modal-add-mare');
+  ['mr-name','mr-chip','mr-year','mr-color','mr-breed','mr-arrived','mr-note'].forEach(id=>document.getElementById(id).value='');
+  toast('Гүү бүртгэгдлээ ✓','ok');
+  queueSync('POST','/mares',m);
+  populateAllDropdowns();
+  // Ороонд орсон бол гишгүүлэх хуваарь нэмэх санал гаргах
+  if(m.estrus==='in'){
+    if(confirm('Гүү ороонд орсон байна. Гишгүүлэлтийн хуваарь нэмэх үү?')){ _prefillMareId=m.id; openBreedingModal(); }
+  } else {
+    if(confirm('Анхны үзлэг товлох уу?')){ openScheduleForMare(m.id); }
+  }
+}
+
+let _curMareId=null;
+function openMareDetail(id){
+  _curMareId=id;
+  const m=db.mares.find(x=>x.id===id); if(!m) return;
+  const s=db.stallions.find(x=>x.id===m.stallionId);
+  const c=db.clients.find(x=>x.id===m.clientId);
+  document.getElementById('md-title').textContent='♀ '+m.name;
+  // Info tab
+  document.getElementById('md-info').innerHTML=`
+    <div class="g2" style="margin-bottom:14px">
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Харилцагч</div><div style="font-weight:600">${c?c.name:'—'} ${c?`<span style="font-size:11px;color:var(--muted)">${c.phone}</span>`:''}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Харьяа азарга</div><div style="font-weight:600;color:var(--blue)">♂ ${s?s.name:'—'}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Өнгө / Үүлдэр</div><div style="font-weight:600">${m.color||'—'} / ${m.breed||'—'}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Чип</div><div style="font-weight:600;font-family:var(--mono)">${m.chip||'—'}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Ирсэн огноо</div><div style="font-weight:600">${fmtDate(m.arrived)}</div></div>
+      <div><div class="muted" style="font-size:11px;margin-bottom:2px">Статус</div>
+        <span class="badge ${m.pregnant?'b-green':m.estrus==='in'?'b-amber':'b-gray'}">${m.pregnant?'🤰 Хээлтэй':m.estrus==='in'?'🔴 Ороонд орсон':'⬜ Хэвийн'}</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <button class="btn btn-sm" onclick="toggleMareEstrus(${id})">🔄 Ороо статус өөрчлөх</button>
+      <button class="btn btn-sm ${m.pregnant?'btn-red':'btn-primary'}" onclick="toggleMarePregnant(${id})">${m.pregnant?'❌ Хээл цуцлах':'✅ Хээлтэй болгох'}</button>
+    </div>`;
+  // Exams tab
+  const exams=db.exams.filter(e=>e.mareId===id).sort((a,b)=>b.date.localeCompare(a.date));
+  document.getElementById('md-exams').innerHTML = exams.length
+    ? exams.map(e=>`<div style="padding:10px 12px;border-radius:var(--r);border:1px solid var(--line2);margin-bottom:6px;background:var(--surface2)">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:4px">
+          <span style="font-weight:600;font-size:13px">${e.type}</span>
+          <div style="display:flex;align-items:center;gap:6px"><span class="muted" style="font-size:11px">${fmtDate(e.date)}</span><span class="badge ${e.done?'b-green':'b-amber'}">${e.done?'Дууссан':'Хүлээгдэж буй'}</span></div>
+        </div>
+        ${e.findings?.length?`<div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:4px">${e.findings.map(f=>`<span class="chip">${f}</span>`).join('')}</div>`:''}
+        ${e.meds?`<div style="font-size:11px;color:var(--green)">💉 ${e.meds}</div>`:''}
+        ${e.note?`<div style="font-size:12px;color:var(--muted);margin-top:3px">${e.note}</div>`:''}
+      </div>`).join('')
+    : '<div class="empty"><div class="empty-text">Үзлэг байхгүй</div></div>';
+  // Breeding tab
+  const breeds=db.breedings.filter(b=>b.mareId===id).sort((a,b)=>(b.date||b.scheduledDate||'').localeCompare(a.date||a.scheduledDate||''));
+  document.getElementById('md-breeding').innerHTML = breeds.length
+    ? breeds.map(b=>`<div style="padding:10px 12px;border-radius:var(--r);border:1px solid var(--gold-line);background:var(--gold-bg);margin-bottom:6px">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <div><div style="font-weight:600;color:var(--blue)">♂ ${b.stallionName}</div><div style="font-size:11px;color:var(--muted)">${b.done?fmtDate(b.date):'Товлосон: '+fmtDate(b.scheduledDate)}</div></div>
+          <span class="badge ${b.done?'b-green':'b-amber'}">${b.done?'Гишгүүлсэн':'Хүлээгдэж буй'}</span>
+        </div>
+        ${b.note?`<div style="font-size:11px;color:var(--muted);margin-top:4px">${b.note}</div>`:''}
+      </div>`).join('')
+    : '<div class="empty"><div class="empty-text">Гишгүүлэлт байхгүй</div></div>';
+  // Finance tab
+  const invs=db.invoices.filter(i=>i.mareId===id||i.items?.some(it=>it.mareId===id));
+  document.getElementById('md-finance').innerHTML = invs.length
+    ? invs.map(i=>{const paid=db.payments.filter(p=>p.invoiceId===i.id).reduce((s,p)=>s+p.amount,0);return `<div style="padding:10px 12px;border-radius:var(--r);border:1px solid var(--line);margin-bottom:6px;background:var(--surface)"><div style="display:flex;justify-content:space-between"><span style="font-weight:600">${fmtDate(i.date)}</span><span class="mono" style="font-weight:700">${fmtMoney(i.total)}</span></div><div style="display:flex;justify-content:space-between;margin-top:4px;font-size:12px;color:var(--muted)"><span>Төлсөн: ${fmtMoney(paid)}</span><span class="${i.total-paid>0?'b-amber':''}" style="font-weight:600;color:${i.total-paid>0?'var(--amber2)':'var(--green2)'}">Үлдэгдэл: ${fmtMoney(i.total-paid)}</span></div></div>`; }).join('')
+    : '<div class="empty"><div class="empty-text">Санхүүгийн бүртгэл байхгүй</div></div>';
+  openModal('modal-mare-detail');
+}
+
+function toggleMareEstrus(id){
+  const m=db.mares.find(x=>x.id===id); if(!m) return;
+  const next=m.estrus==='in'?'out':'in';
+  m.estrus=next;
+  if(next==='in' && !m.pregnant){
+    toast('Ороонд орлоо — гишгүүлэлт товлох хэрэгтэй','ok');
+  }
+  saveDB(); openMareDetail(id); updateBadges();
+  queueSync('PUT','/mares/'+id,{estrus:next});
+}
+function toggleMarePregnant(id){
+  const m=db.mares.find(x=>x.id===id); if(!m) return;
+  m.pregnant=!m.pregnant;
+  if(m.pregnant){ m.pregnantDate=todayStr(); m.estrus='out'; }
+  else { m.pregnantDate=null; }
+  saveDB(); openMareDetail(id); updateBadges();
+}
+function openExamForMare(){ closeModal('modal-mare-detail'); openExamModal(_curMareId); }
+function openBreedingForMare(){ closeModal('modal-mare-detail'); _prefillMareId=_curMareId; openBreedingModal(); }
+function deleteMare(){
+  if(!confirm('Гүүний бүх мэдээллийг устгах уу?')) return;
+  db.mares=db.mares.filter(m=>m.id!==_curMareId);
+  saveDB(); updateBadges(); renderMares(); closeModal('modal-mare-detail'); toast('Устгагдлаа');
+}
+
+// ══════════════════════════════════════════════════════
+//  SCHEDULE / EXAMS
+// ══════════════════════════════════════════════════════
+let _schedTab='today';
+function schedTab(tab,btn){ _schedTab=tab; document.querySelectorAll('#screen-schedule .tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderSchedule(tab); }
+
+function renderSchedule(tab){
+  const today=todayStr();
+  let list;
+  if(tab==='today') list=db.exams.filter(e=>e.date===today);
+  else if(tab==='upcoming') list=db.exams.filter(e=>e.date>today&&e.date<=dateAddDays(today,7)&&!e.done).sort((a,b)=>a.date.localeCompare(b.date));
+  else if(tab==='done') list=db.exams.filter(e=>e.done).sort((a,b)=>b.date.localeCompare(a.date)).slice(0,50);
+  else list=db.exams.sort((a,b)=>b.date.localeCompare(a.date)).slice(0,100);
+  document.getElementById('schedule-list').innerHTML = list.length
+    ? list.map(e=>scheduleItem(e,true)).join('')
+    : '<div class="card"><div class="empty"><div class="empty-icon">📅</div><div class="empty-text">Үзлэг байхгүй</div></div></div>';
+}
+
+function scheduleItem(e,withActions=false){
+  const m=db.mares.find(x=>x.id===e.mareId);
+  const c=m?db.clients.find(x=>x.id===m.clientId):null;
+  return `<div class="list-item ${e.done?'':''}">
+    <div class="li-av" style="background:var(--blue-bg);color:var(--blue2)">🩺</div>
+    <div class="li-info">
+      <div class="li-name">♀ ${e.mareName} ${c?`<span class="chip" style="font-size:10px">${c.name}</span>`:''}</div>
+      <div class="li-sub">${e.type} · ${fmtDate(e.date)}${e.time?' · '+e.time:''}</div>
+      ${e.done&&e.findings?.length?`<div style="display:flex;flex-wrap:wrap;gap:3px;margin-top:3px">${e.findings.map(f=>`<span class="chip">${f}</span>`).join('')}</div>`:''}
+    </div>
+    <div class="li-r" style="gap:4px">
+      <span class="badge ${e.done?'b-green':'b-amber'}">${e.done?'Дууссан':'Хүлээгдэж буй'}</span>
+      ${withActions&&!e.done?`<button class="btn btn-xs btn-primary" onclick="openExamModal(${e.mareId},${e.id})">🩺 Хийх</button>`:''}
+      ${withActions&&!e.done?`<button class="btn btn-xs btn-red" onclick="delExam(${e.id})">×</button>`:''}
+    </div>
+  </div>`;
+}
+
+function onSchedMareChange(){
+  const mareId=parseInt(document.getElementById('sch-mare').value);
+  const m=db.mares.find(x=>x.id===mareId);
+  const s=m?db.stallions.find(x=>x.id===m.stallionId):null;
+  document.getElementById('sch-stallion-info').value=s?s.name:'—';
+}
+
+function saveSchedule(){
+  const mareId=parseInt(document.getElementById('sch-mare').value);
+  const type=document.getElementById('sch-type').value;
+  const date=document.getElementById('sch-date').value;
+  if(!mareId||!type||!date){ toast('Гүү, төрөл, огноог оруулна уу','err'); return; }
+  const m=db.mares.find(x=>x.id===mareId);
+  const e={id:nextId(),mareId,mareName:m?.name||'',clientId:m?.clientId||null,stallionId:m?.stallionId||null,type,date,time:document.getElementById('sch-time').value,note:document.getElementById('sch-note').value.trim(),done:false,findings:[],meds:'',createdAt:todayStr()};
+  db.exams.push(e);
+  saveDB(); updateBadges();
+  closeModal('modal-add-schedule');
+  ['sch-time','sch-note'].forEach(id=>document.getElementById(id).value='');
+  toast('Үзлэг товлогдлоо ✓','ok');
+  renderSchedule(_schedTab);
+  queueSync('POST','/exams',e);
+}
+
+function openScheduleForMare(mareId){
+  populateSchedDropdown();
+  const sel=document.getElementById('sch-mare');
+  if(sel){ sel.value=mareId; onSchedMareChange(); }
+  document.getElementById('sch-date').value=todayStr();
+  openModal('modal-add-schedule');
+}
+
+function delExam(id){
+  if(!confirm('Устгах уу?')) return;
+  db.exams=db.exams.filter(e=>e.id!==id);
+  saveDB(); updateBadges(); renderSchedule(_schedTab);
+}
+
+// ── Quick Exam ──
+let _qeSchId=null;
+function openExamModal(mareId, schId=null){
+  _qeSchId=schId;
+  populateQEDropdown();
+  if(mareId){ document.getElementById('qe-mare').value=mareId; onQEMareChange(); }
+  document.getElementById('qe-date').value=todayStr();
+  // Clear findings
+  document.getElementById('qe-findings').innerHTML = FINDINGS.map(f=>`
+    <label style="display:inline-flex;align-items:center;gap:5px;padding:5px 10px;border:1.5px solid var(--line);border-radius:20px;cursor:pointer;font-size:12px;font-weight:500;transition:all .12s" onclick="this.classList.toggle('sel-find');this.querySelector('input').checked=this.classList.contains('sel-find');this.style.borderColor=this.classList.contains('sel-find')?'var(--blue2)':'var(--line)';this.style.background=this.classList.contains('sel-find')?'var(--blue-bg)':'transparent'">
+      <input type="checkbox" value="${f}" style="display:none">${f}
+    </label>`).join('');
+  ['qe-meds','qe-note','qe-breed-date','qe-breed-time','qe-echo1-date','qe-next-date'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.querySelectorAll('input[name="qe-estrus"]').forEach(r=>r.checked=false);
+  document.getElementById('qe-estrus-yes-block').style.display='none';
+  document.getElementById('qe-estrus-no-block').style.display='none';
+  openModal('modal-quick-exam');
+}
+
+function onQEMareChange(){
+  const mareId=parseInt(document.getElementById('qe-mare').value);
+  const m=db.mares.find(x=>x.id===mareId);
+  const s=m?db.stallions.find(x=>x.id===m.stallionId):null;
+  document.getElementById('qe-stallion-info').value=s?s.name:'—';
+  if(m?.estrus==='in'){
+    document.getElementById('qe-type').value='Ороо баталгаажуулах';
+  }
+}
+
+function onQEEstrusChange(){
+  const val=document.querySelector('input[name="qe-estrus"]:checked')?.value;
+  document.getElementById('qe-estrus-yes-block').style.display=val==='yes'?'block':'none';
+  document.getElementById('qe-estrus-no-block').style.display=val==='no'?'block':'none';
+  if(val==='yes'){
+    document.getElementById('qe-breed-date').value=dateAddDays(document.getElementById('qe-date').value||todayStr(),1);
+    document.getElementById('qe-echo1-date').value=dateAddDays(document.getElementById('qe-date').value||todayStr(),17);
+  } else if(val==='no'){
+    document.getElementById('qe-next-date').value=dateAddDays(document.getElementById('qe-date').value||todayStr(),3);
+  }
+}
+
+function saveExam(markDone){
+  const mareId=parseInt(document.getElementById('qe-mare').value);
+  const date=document.getElementById('qe-date').value;
+  const type=document.getElementById('qe-type').value;
+  if(!mareId||!date){ toast('Гүү болон огноог оруулна уу','err'); return; }
+  const m=db.mares.find(x=>x.id===mareId);
+  const findings=Array.from(document.querySelectorAll('#qe-findings input:checked')).map(x=>x.value);
+  const estrusVal=document.querySelector('input[name="qe-estrus"]:checked')?.value;
+  const exam={id:nextId(),mareId,mareName:m?.name||'',clientId:m?.clientId||null,stallionId:m?.stallionId||null,type,date,time:'',findings,meds:document.getElementById('qe-meds').value.trim(),note:document.getElementById('qe-note').value.trim(),estrusResult:estrusVal||null,done:markDone,createdAt:todayStr()};
+  // Хэрэв товлосон үзлэг байвал дуусгах
+  if(_qeSchId&&markDone){ const s=db.exams.find(x=>x.id===_qeSchId); if(s){ s.done=true; s.findings=findings; s.meds=exam.meds; s.note=exam.note; } }
+  else { db.exams.push(exam); }
+  // Ороонд орсон бол гишгүүлэх хуваарь нэмэх
+  if(estrusVal==='yes'){
+    const brDate=document.getElementById('qe-breed-date').value;
+    const echo1=document.getElementById('qe-echo1-date').value;
+    if(brDate){
+      const br={id:nextId(),mareId,mareName:m?.name||'',clientId:m?.clientId||null,stallionId:m?.stallionId||null,stallionName:m?.stallionName||'—',scheduledDate:brDate,scheduledTime:document.getElementById('qe-breed-time').value,done:false,price:db.settings.priceBreeding||500000,note:'Ороо баталгаажуулсны дараах автомат',createdAt:todayStr()};
+      db.breedings.push(br);
+      if(m){ m.estrus='in'; }
+    }
+    if(echo1){
+      db.exams.push({id:nextId(),mareId,mareName:m?.name||'',clientId:m?.clientId||null,stallionId:m?.stallionId||null,type:'ЭХО1 — гишгүүлэлтийн дараа',date:echo1,time:'',done:false,findings:[],meds:'',note:'Автомат товлогдсон',createdAt:todayStr()});
+    }
+  } else if(estrusVal==='no'){
+    const nextDate=document.getElementById('qe-next-date').value;
+    const nextType=document.getElementById('qe-next-type').value;
+    if(nextDate){ db.exams.push({id:nextId(),mareId,mareName:m?.name||'',clientId:m?.clientId||null,stallionId:m?.stallionId||null,type:nextType,date:nextDate,time:'',done:false,findings:[],meds:'',note:'Дахин үзлэг',createdAt:todayStr()}); }
+    if(m){ m.estrus='out'; }
+  }
+  saveDB(); updateBadges(); closeModal('modal-quick-exam');
+  renderScreen(_curScreen);
+  toast('Үзлэг бүртгэгдлээ ✓'+(estrusVal==='yes'?' · Гишгүүлэлт товлогдлоо 🔗':estrusVal==='no'?' · Дараагийн үзлэг нэмэгдлээ 📅':''),'ok');
+  queueSync('POST','/exams',exam);
+}
+
+// ══════════════════════════════════════════════════════
+//  BREEDING
+// ══════════════════════════════════════════════════════
+let _breedTab='pending', _prefillMareId=null;
+function breedTab(tab,btn){ _breedTab=tab; document.querySelectorAll('#screen-breeding .tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderBreeding(tab); }
+
+function renderBreeding(tab){
+  let list;
+  if(tab==='pending') list=db.breedings.filter(b=>!b.done).sort((a,b)=>a.scheduledDate?.localeCompare(b.scheduledDate||''));
+  else if(tab==='done') list=db.breedings.filter(b=>b.done).sort((a,b)=>b.date?.localeCompare(a.date||'')).slice(0,100);
+  else list=db.breedings.sort((a,b)=>(b.date||b.scheduledDate||'').localeCompare(a.date||a.scheduledDate||'')).slice(0,100);
+  document.getElementById('breeding-list').innerHTML = list.length
+    ? list.map(b=>{
+        const m=db.mares.find(x=>x.id===b.mareId);
+        const c=m?db.clients.find(x=>x.id===m.clientId):null;
+        return `<div class="list-item" onclick="openBreedingModal(${b.id})">
+          <div class="li-av" style="background:var(--gold-bg);color:var(--gold);font-size:18px">🔗</div>
+          <div class="li-info">
+            <div class="li-name">♀ ${b.mareName} ${c?`<span class="chip">${c.name}</span>`:''}</div>
+            <div class="li-sub">♂ ${b.stallionName} · ${b.done?fmtDate(b.date):'Товлосон: '+fmtDate(b.scheduledDate)}${b.scheduledTime?' · '+b.scheduledTime:''}</div>
+            ${b.price?`<div style="font-size:11px;color:var(--green);margin-top:2px">${fmtMoney(b.price)}</div>`:''}
+          </div>
+          <div class="li-r" style="gap:4px">
+            <span class="badge ${b.done?'b-green':'b-amber'}">${b.done?'Гишгүүлсэн':'Хүлээгдэж буй'}</span>
+            ${!b.done?`<button class="btn btn-xs btn-primary" onclick="event.stopPropagation();quickBreedDone(${b.id})">✓ Хийгдлээ</button>`:''}
+          </div>
+        </div>`;
+      }).join('')
+    : '<div class="card"><div class="empty"><div class="empty-icon">🔗</div><div class="empty-text">Гишгүүлэлт байхгүй</div></div></div>';
+}
+
+function onBrMareChange(){
+  const mareId=parseInt(document.getElementById('br-mare').value);
+  const m=db.mares.find(x=>x.id===mareId);
+  const brStal=document.getElementById('br-stallion');
+  brStal.innerHTML='<option value="">— Азарга сонгох —</option>'+db.stallions.map(s=>`<option value="${s.id}" ${m&&m.stallionId===s.id?'selected':''}>${s.name}</option>`).join('');
+  const brPrice=document.getElementById('br-price');
+  if(brPrice&&!brPrice.value) brPrice.value=db.settings.priceBreeding||500000;
+}
+
+let _curBreedId=null;
+function openBreedingModal(id=null){
+  _curBreedId=id;
+  const brMare=document.getElementById('br-mare');
+  brMare.innerHTML='<option value="">— Гүү сонгох —</option>'+db.mares.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+  if(_prefillMareId){ brMare.value=_prefillMareId; _prefillMareId=null; onBrMareChange(); }
+  document.getElementById('br-date').value=todayStr();
+  document.getElementById('br-echo1').value=dateAddDays(todayStr(),17);
+  document.getElementById('br-price').value=db.settings.priceBreeding||500000;
+  document.getElementById('br-note').value='';
+  document.getElementById('br-time').value='';
+  openModal('modal-add-breeding');
+}
+
+function saveBreeding(){
+  const mareId=parseInt(document.getElementById('br-mare').value);
+  const stallionId=parseInt(document.getElementById('br-stallion').value);
+  const date=document.getElementById('br-date').value;
+  if(!mareId||!stallionId||!date){ toast('Гүү, азарга, огноог оруулна уу','err'); return; }
+  const m=db.mares.find(x=>x.id===mareId);
+  const s=db.stallions.find(x=>x.id===stallionId);
+  const echo1=document.getElementById('br-echo1').value;
+  const price=parseInt(document.getElementById('br-price').value)||0;
+  const b={id:nextId(),mareId,mareName:m?.name||'',clientId:m?.clientId||null,stallionId,stallionName:s?.name||'',scheduledDate:date,scheduledTime:document.getElementById('br-time').value,date,time:document.getElementById('br-time').value,done:true,price,echo1Date:echo1,note:document.getElementById('br-note').value.trim(),createdAt:todayStr()};
+  db.breedings.push(b);
+  // ЭХО1 автомат товлох
+  if(echo1){ db.exams.push({id:nextId(),mareId,mareName:m?.name||'',clientId:m?.clientId||null,stallionId,type:'ЭХО1 — гишгүүлэлтийн дараа',date:echo1,time:'',done:false,findings:[],meds:'',note:'Гишгүүлэлтийн дараах автомат',createdAt:todayStr()}); }
+  // Нэхэмжлэл автомат
+  if(price>0&&m?.clientId){
+    const inv={id:nextId(),clientId:m.clientId,clientName:m.clientName||'',date,total:price,items:[{desc:`Гишгүүлэлт — ♀${m.name} × ♂${s?.name||''}`,amount:price,mareId}],paid:0,note:'Гишгүүлэлтийн автомат нэхэмжлэл',createdAt:todayStr()};
+    db.invoices.push(inv);
+  }
+  saveDB(); updateBadges(); closeModal('modal-add-breeding');
+  renderBreeding(_breedTab);
+  toast('Гишгүүлэлт бүртгэгдлээ ✓'+(echo1?' · ЭХО1 нэмэгдлээ 📅':'')+(price>0?' · Нэхэмжлэл үүслээ 💰':''),'ok');
+  queueSync('POST','/breedings',b);
+}
+
+function quickBreedDone(id){
+  const b=db.breedings.find(x=>x.id===id); if(!b) return;
+  b.done=true; b.date=todayStr();
+  saveDB(); updateBadges(); renderBreeding(_breedTab); renderDashboard();
+  toast('Гишгүүлэлт дуусгагдлаа ✓','ok');
+}
+
+// ══════════════════════════════════════════════════════
+//  PREGNANCY
+// ══════════════════════════════════════════════════════
+function renderPregnancy(){
+  const pregMares=db.mares.filter(m=>m.pregnant);
+  const today=new Date();
+  document.getElementById('pregnancy-list').innerHTML = pregMares.length
+    ? `<div class="g2">${pregMares.map(m=>{
+        const s=db.stallions.find(x=>x.id===m.stallionId);
+        const c=db.clients.find(x=>x.id===m.clientId);
+        const lastBreed=db.breedings.filter(b=>b.mareId===m.id&&b.done).sort((a,b2)=>b2.date?.localeCompare(a.date||'')||0)[0];
+        const matDate=lastBreed?.date?new Date(lastBreed.date):null;
+        const daysPassed=matDate?Math.round((today-matDate)/86400000):null;
+        const pct=daysPassed?Math.min(Math.round(daysPassed/GESTATION_DAYS*100),100):null;
+        const expectedDate=matDate?new Date(matDate.getTime()+GESTATION_DAYS*86400000):null;
+        return `<div class="card" onclick="openMareDetail(${m.id})" style="cursor:pointer">
+          <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px">
+            <div>
+              <div style="font-size:15px;font-weight:800;color:var(--green)">♀ ${m.name}</div>
+              <div style="font-size:11px;color:var(--muted)">${c?c.name:''} · ♂ ${s?s.name:'—'}</div>
+            </div>
+            ${pct!==null?`<span class="badge b-green">${pct}%</span>`:''}
+          </div>
+          ${daysPassed!==null?`
+          <div style="font-size:12px;color:var(--ink3);margin-bottom:6px">${daysPassed} хоног · Төрөх: ${expectedDate?expectedDate.toISOString().split('T')[0]:'—'}</div>
+          <div class="prog-wrap"><div class="prog-fill" style="width:${pct}%;background:${pct>80?'var(--amber2)':'var(--green2)'}"></div></div>`
+          :`<div style="font-size:12px;color:var(--muted)">Гишгүүлсэн огноо тодорхойгүй</div>`}
+        </div>`;
+      }).join('')}</div>`
+    : '<div class="card"><div class="empty"><div class="empty-icon">🤰</div><div class="empty-text">Хээлтэй гүү байхгүй байна.<br>Гүүний дэлгэрэнгүй мэдээлэлд "Хээлтэй болгох" товчийг ашиглана уу.</div></div></div>';
+}
+
+// ══════════════════════════════════════════════════════
+//  FINANCE
+// ══════════════════════════════════════════════════════
+let _finTab='invoices';
+function finTab(tab,btn){ _finTab=tab; document.querySelectorAll('#screen-finance .tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderFinance(tab); }
+
+function renderFinance(tab){
+  const totalInv=db.invoices.reduce((s,i)=>s+i.total,0);
+  const totalPaid=db.payments.reduce((s,p)=>s+p.amount,0);
+  const outstanding=totalInv-totalPaid;
+  document.getElementById('finance-stats').innerHTML=[
+    {label:'Нийт нэхэмжлэл',val:fmtMoney(totalInv),color:'var(--blue2)'},
+    {label:'Нийт төлсөн',val:fmtMoney(totalPaid),color:'var(--green2)'},
+    {label:'Үлдэгдэл',val:fmtMoney(outstanding),color:outstanding>0?'var(--amber2)':'var(--green2)'},
+  ].map(s=>`<div class="stat-card"><div class="stat-label">${s.label}</div><div class="stat-value mono" style="font-size:18px;color:${s.color}">${s.val}</div></div>`).join('');
+
+  if(tab==='invoices'){
+    document.getElementById('finance-list').innerHTML = db.invoices.length
+      ? `<div class="tbl-wrap"><table><thead><tr><th>Огноо</th><th>Харилцагч</th><th>Нийт</th><th>Төлсөн</th><th>Үлдэгдэл</th><th>Үйлдэл</th></tr></thead><tbody>
+          ${db.invoices.map(i=>{
+            const paid=db.payments.filter(p=>p.invoiceId===i.id).reduce((s,p)=>s+p.amount,0);
+            const rem=i.total-paid;
+            return `<tr><td class="mono" style="font-size:12px">${fmtDate(i.date)}</td><td style="font-weight:600">${i.clientName}</td><td class="mono">${fmtMoney(i.total)}</td><td class="mono" style="color:var(--green)">${fmtMoney(paid)}</td><td class="mono" style="color:${rem>0?'var(--amber2)':'var(--green2)'}">₮${rem.toLocaleString()}</td><td><button class="btn btn-xs btn-primary" onclick="openPaymentForInv(${i.id})">+ Төлбөр</button></td></tr>`;
+          }).join('')}
+        </tbody></table></div>`
+      : '<div class="card"><div class="empty"><div class="empty-text">Нэхэмжлэл байхгүй</div></div></div>';
+  } else if(tab==='payments'){
+    document.getElementById('finance-list').innerHTML = db.payments.length
+      ? `<div class="tbl-wrap"><table><thead><tr><th>Огноо</th><th>Харилцагч</th><th>Дүн</th><th>Хэлбэр</th><th>Тэмдэглэл</th></tr></thead><tbody>
+          ${db.payments.map(p=>`<tr><td class="mono" style="font-size:12px">${fmtDate(p.date)}</td><td style="font-weight:600">${p.clientName||'—'}</td><td class="mono" style="color:var(--green)">${fmtMoney(p.amount)}</td><td><span class="chip">${p.method}</span></td><td style="color:var(--muted);font-size:12px">${p.note||'—'}</td></tr>`).join('')}
+        </tbody></table></div>`
+      : '<div class="card"><div class="empty"><div class="empty-text">Төлбөр байхгүй</div></div></div>';
+  } else {
+    const unpaidInvs=db.invoices.filter(i=>{
+      const paid=db.payments.filter(p=>p.invoiceId===i.id).reduce((s,p)=>s+p.amount,0);
+      return i.total-paid>0;
+    });
+    document.getElementById('finance-list').innerHTML = unpaidInvs.length
+      ? unpaidInvs.map(i=>{
+          const paid=db.payments.filter(p=>p.invoiceId===i.id).reduce((s,p)=>s+p.amount,0);
+          const rem=i.total-paid;
+          return `<div class="list-item"><div class="li-info"><div class="li-name">${i.clientName}</div><div class="li-sub">${fmtDate(i.date)} · Нийт: ${fmtMoney(i.total)}</div></div><div class="li-r"><span class="badge b-amber">${fmtMoney(rem)}</span><button class="btn btn-xs btn-primary" onclick="openPaymentForInv(${i.id})">Төлбөр</button></div></div>`;
+        }).join('')
+      : '<div class="card"><div class="empty"><div class="empty-icon">✅</div><div class="empty-text">Бүх нэхэмжлэл тооцоо дутуугүй</div></div></div>';
+  }
+}
+
+function populateInvClient(preselect=null){
+  const sel=document.getElementById('inv-client');
+  sel.innerHTML='<option value="">— Харилцагч сонгох —</option>'+db.clients.map(c=>`<option value="${c.id}" ${preselect==c.id?'selected':''}>${c.name}</option>`).join('');
+  document.getElementById('inv-date').value=todayStr();
+  document.getElementById('inv-items').innerHTML='';
+  document.getElementById('inv-total').textContent='₮0';
+  addInvItem();
+}
+
+function onInvClientChange(){ calcInvTotal(); }
+
+function addInvItem(){
+  const wrap=document.getElementById('inv-items');
+  const idx=wrap.children.length;
+  const div=document.createElement('div');
+  div.style.cssText='display:grid;grid-template-columns:1fr 100px 28px;gap:6px;margin-bottom:6px;align-items:center';
+  div.innerHTML=`<input class="inp" placeholder="Тайлбар (Гишгүүлэлт, ЭХО...)" oninput="calcInvTotal()" style="font-size:13px!important">
+    <input class="inp" type="number" placeholder="Дүн" oninput="calcInvTotal()" style="font-size:13px!important;font-family:var(--mono)">
+    <button class="btn btn-xs btn-red" onclick="this.parentElement.remove();calcInvTotal()">×</button>`;
+  wrap.appendChild(div);
+}
+
+function calcInvTotal(){
+  let total=0;
+  document.querySelectorAll('#inv-items > div').forEach(row=>{
+    total+=parseInt(row.querySelectorAll('input')[1]?.value||0)||0;
+  });
+  document.getElementById('inv-total').textContent=fmtMoney(total);
+}
+
+function saveInvoice(){
+  const clientId=parseInt(document.getElementById('inv-client').value);
+  const date=document.getElementById('inv-date').value;
+  if(!clientId||!date){ toast('Харилцагч болон огноог оруулна уу','err'); return; }
+  const c=db.clients.find(x=>x.id===clientId);
+  const items=[];
+  document.querySelectorAll('#inv-items > div').forEach(row=>{
+    const desc=row.querySelectorAll('input')[0]?.value.trim();
+    const amount=parseInt(row.querySelectorAll('input')[1]?.value)||0;
+    if(desc&&amount) items.push({desc,amount});
+  });
+  if(!items.length){ toast('Дор хаяж нэг зүйл нэмнэ үү','err'); return; }
+  const total=items.reduce((s,i)=>s+i.amount,0);
+  const inv={id:nextId(),clientId,clientName:c?.name||'',date,total,items,note:document.getElementById('inv-note').value.trim(),createdAt:todayStr()};
+  db.invoices.push(inv);
+  saveDB(); closeModal('modal-add-invoice'); renderFinance(_finTab); toast('Нэхэмжлэл үүсгэгдлээ ✓','ok');
+  queueSync('POST','/invoices',inv);
+}
+
+function openPaymentForInv(invoiceId){
+  const inv=db.invoices.find(x=>x.id===invoiceId);
+  const paid=db.payments.filter(p=>p.invoiceId===invoiceId).reduce((s,p)=>s+p.amount,0);
+  const rem=inv?inv.total-paid:0;
+  document.getElementById('pay-invoice').innerHTML=db.invoices.map(i=>`<option value="${i.id}" ${i.id===invoiceId?'selected':''}>${i.clientName} — ${fmtDate(i.date)} — ${fmtMoney(i.total)}</option>`).join('');
+  document.getElementById('pay-date').value=todayStr();
+  document.getElementById('pay-amount').value=rem>0?rem:'';
+  document.getElementById('pay-note').value='';
+  openModal('modal-add-payment');
+}
+
+function savePayment(){
+  const invoiceId=parseInt(document.getElementById('pay-invoice').value);
+  const date=document.getElementById('pay-date').value;
+  const amount=parseInt(document.getElementById('pay-amount').value)||0;
+  if(!invoiceId||!date||!amount){ toast('Мэдээллийг бүрэн оруулна уу','err'); return; }
+  const inv=db.invoices.find(x=>x.id===invoiceId);
+  const p={id:nextId(),invoiceId,clientId:inv?.clientId||null,clientName:inv?.clientName||'',date,amount,method:document.getElementById('pay-method').value,note:document.getElementById('pay-note').value.trim(),createdAt:todayStr()};
+  db.payments.push(p);
+  saveDB(); closeModal('modal-add-payment'); renderFinance(_finTab); toast('Төлбөр бүртгэгдлээ ✓','ok');
+  queueSync('POST','/payments',p);
+}
+
+// ══════════════════════════════════════════════════════
+//  REPORTS
+// ══════════════════════════════════════════════════════
+let _repTab='client';
+function repTab(tab,btn){ _repTab=tab; document.querySelectorAll('#screen-reports .tab-btn').forEach(b=>b.classList.remove('active')); btn.classList.add('active'); renderReports(); }
+
+function getRepFilter(){
+  const year=parseInt(document.getElementById('report-year')?.value)||new Date().getFullYear();
+  const month=parseInt(document.getElementById('report-month')?.value)||0;
+  return {year,month};
+}
+function matchFilter(dateStr,f){
+  if(!dateStr) return false;
+  const d=new Date(dateStr);
+  if(d.getFullYear()!==f.year) return false;
+  if(f.month&&d.getMonth()+1!==f.month) return false;
+  return true;
+}
+
+function renderReports(){
+  const f=getRepFilter();
+  if(_repTab==='client') renderRepClient(f);
+  else if(_repTab==='stallion') renderRepStallion(f);
+  else if(_repTab==='monthly') renderRepMonthly(f);
+  else if(_repTab==='pregnancy') renderRepPregnancy(f);
+  else if(_repTab==='finance') renderRepFinance(f);
+  else if(_repTab==='mare') renderRepMare(f);
+}
+
+function renderRepClient(f){
+  const rows=db.clients.map(c=>{
+    const mares=db.mares.filter(m=>m.clientId===c.id);
+    const breeds=db.breedings.filter(b=>b.clientId===c.id&&b.done&&matchFilter(b.date,f));
+    const exams=db.exams.filter(e=>e.clientId===c.id&&e.done&&matchFilter(e.date,f));
+    const totalInv=db.invoices.filter(i=>i.clientId===c.id&&matchFilter(i.date,f)).reduce((s,i)=>s+i.total,0);
+    const totalPaid=db.payments.filter(p=>p.clientId===c.id&&matchFilter(p.date,f)).reduce((s,p)=>s+p.amount,0);
+    const pregMares=mares.filter(m=>m.pregnant).length;
+    return {c,mares,breeds,exams,totalInv,totalPaid,pregMares};
+  }).filter(r=>r.breeds.length||r.exams.length||r.totalInv>0);
+  document.getElementById('report-content').innerHTML = rows.length
+    ? `<div class="tbl-wrap"><table><thead><tr><th>Харилцагч</th><th>Гүүнүүд</th><th>Гишгүүлэлт</th><th>Үзлэг</th><th>Хээлтэй</th><th>Нэхэмжлэл</th><th>Төлсөн</th><th>Үлдэгдэл</th></tr></thead><tbody>
+      ${rows.map(r=>`<tr onclick="openClientDetail(${r.c.id})" style="cursor:pointer">
+        <td style="font-weight:700">${r.c.name}<div style="font-size:11px;color:var(--muted)">${r.c.phone||''}</div></td>
+        <td class="mono">${r.mares.length}</td>
+        <td class="mono" style="color:var(--gold);font-weight:700">${r.breeds.length}</td>
+        <td class="mono">${r.exams.length}</td>
+        <td class="mono" style="color:var(--green)">${r.pregMares}</td>
+        <td class="mono">${fmtMoney(r.totalInv)}</td>
+        <td class="mono" style="color:var(--green2)">${fmtMoney(r.totalPaid)}</td>
+        <td class="mono" style="color:${r.totalInv-r.totalPaid>0?'var(--amber2)':'var(--green2)'}"><strong>${fmtMoney(r.totalInv-r.totalPaid)}</strong></td>
+      </tr>`).join('')}
+      <tr style="background:var(--surface2);font-weight:700">
+        <td>НИЙТ</td>
+        <td class="mono">${db.mares.length}</td>
+        <td class="mono">${rows.reduce((s,r)=>s+r.breeds.length,0)}</td>
+        <td class="mono">${rows.reduce((s,r)=>s+r.exams.length,0)}</td>
+        <td class="mono">${rows.reduce((s,r)=>s+r.pregMares,0)}</td>
+        <td class="mono">${fmtMoney(rows.reduce((s,r)=>s+r.totalInv,0))}</td>
+        <td class="mono">${fmtMoney(rows.reduce((s,r)=>s+r.totalPaid,0))}</td>
+        <td class="mono">${fmtMoney(rows.reduce((s,r)=>s+r.totalInv-r.totalPaid,0))}</td>
+      </tr>
+    </tbody></table></div>`
+    : '<div class="card"><div class="empty"><div class="empty-text">Тайлан байхгүй</div></div></div>';
+}
+
+function renderRepStallion(f){
+  const rows=db.stallions.map(s=>{
+    const mares=db.mares.filter(m=>m.stallionId===s.id);
+    const breeds=db.breedings.filter(b=>b.stallionId===s.id&&b.done&&matchFilter(b.date,f));
+    const preg=mares.filter(m=>m.pregnant&&m.stallionId===s.id).length;
+    const rate=breeds.length?Math.round(preg/breeds.length*100):0;
+    const income=breeds.reduce((sm,b)=>sm+(b.price||0),0);
+    return {s,mares,breeds,preg,rate,income};
+  });
+  document.getElementById('report-content').innerHTML=`<div class="tbl-wrap"><table><thead><tr><th>Азарга</th><th>Харьяа гүү</th><th>Гишгүүлэлт</th><th>Хээлтэй</th><th>Хээлтэлтийн хувь</th><th>Орлого</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr>
+      <td style="font-weight:700;color:var(--blue)">♂ ${r.s.name}<div style="font-size:11px;color:var(--muted)">${r.s.breed||''}</div></td>
+      <td class="mono">${r.mares.length}</td>
+      <td class="mono" style="font-weight:700;color:var(--gold)">${r.breeds.length}</td>
+      <td class="mono" style="color:var(--green)">${r.preg}</td>
+      <td><div style="display:flex;align-items:center;gap:8px"><div class="prog-wrap" style="width:80px;margin:0"><div class="prog-fill" style="width:${r.rate}%;background:var(--green2)"></div></div><span class="mono" style="font-size:12px">${r.rate}%</span></div></td>
+      <td class="mono" style="color:var(--green2);font-weight:700">${fmtMoney(r.income)}</td>
+    </tr>`).join('')}
+  </tbody></table></div>`;
+}
+
+function renderRepMonthly(f){
+  const months=Array.from({length:12},(_,i)=>i+1);
+  const rows=months.map(m=>{
+    const mf={year:f.year,month:m};
+    const breeds=db.breedings.filter(b=>b.done&&matchFilter(b.date,mf)).length;
+    const exams=db.exams.filter(e=>e.done&&matchFilter(e.date,mf)).length;
+    const income=db.invoices.filter(i=>matchFilter(i.date,mf)).reduce((s,i)=>s+i.total,0);
+    return {month:m,breeds,exams,income};
+  });
+  document.getElementById('report-content').innerHTML=`<div class="tbl-wrap"><table><thead><tr><th>Сар</th><th>Гишгүүлэлт</th><th>Үзлэг</th><th>Орлого</th></tr></thead><tbody>
+    ${rows.map(r=>`<tr ${r.month===new Date().getMonth()+1?'style="background:var(--green-bg)"':''}>
+      <td style="font-weight:600">${r.month}-р сар</td>
+      <td class="mono" style="font-weight:700;color:${r.breeds?'var(--gold)':'var(--muted)'}">${r.breeds}</td>
+      <td class="mono" style="color:${r.exams?'var(--blue2)':'var(--muted)'}">${r.exams}</td>
+      <td class="mono" style="color:${r.income?'var(--green2)':'var(--muted)'};font-weight:${r.income?700:400}">${r.income?fmtMoney(r.income):'—'}</td>
+    </tr>`).join('')}
+  </tbody></table></div>`;
+}
+
+function renderRepPregnancy(f){
+  const pregMares=db.mares.filter(m=>m.pregnant);
+  const confirmedBreeds=db.breedings.filter(b=>b.done&&matchFilter(b.date,f)).length;
+  const pregCount=pregMares.length;
+  const rate=confirmedBreeds?Math.round(pregCount/confirmedBreeds*100):0;
+  document.getElementById('report-content').innerHTML=`
+    <div class="g3 stats-row" style="margin-bottom:14px">
+      <div class="stat-card"><div class="stat-label">Нийт гишгүүлэлт</div><div class="stat-value" style="color:var(--gold)">${confirmedBreeds}</div></div>
+      <div class="stat-card"><div class="stat-label">Хээлтэй гүүнүүд</div><div class="stat-value" style="color:var(--green2)">${pregCount}</div></div>
+      <div class="stat-card"><div class="stat-label">Хээлтэлтийн хувь</div><div class="stat-value" style="color:var(--green2)">${rate}%</div><div class="prog-wrap"><div class="prog-fill" style="width:${rate}%;background:var(--green2)"></div></div></div>
+    </div>
+    <div class="g2">${pregMares.map(m=>{
+      const s=db.stallions.find(x=>x.id===m.stallionId);
+      const c=db.clients.find(x=>x.id===m.clientId);
+      const lastBreed=db.breedings.filter(b=>b.mareId===m.id&&b.done).sort((a,b2)=>b2.date?.localeCompare(a.date||'')||0)[0];
+      const matDate=lastBreed?.date?new Date(lastBreed.date):null;
+      const daysPassed=matDate?Math.round((new Date()-matDate)/86400000):null;
+      const pct=daysPassed?Math.min(Math.round(daysPassed/GESTATION_DAYS*100),100):0;
+      return `<div class="card"><div style="font-weight:700;color:var(--green)">♀ ${m.name}</div><div style="font-size:11px;color:var(--muted)">${c?c.name:''} · ♂ ${s?s.name:'—'}</div>${daysPassed!==null?`<div style="font-size:12px;margin-top:6px">${daysPassed} хоног</div><div class="prog-wrap"><div class="prog-fill" style="width:${pct}%;background:var(--green2)"></div></div>`:''}</div>`;
+    }).join('')}</div>`;
+}
+
+function renderRepFinance(f){
+  const invs=db.invoices.filter(i=>matchFilter(i.date,f));
+  const pays=db.payments.filter(p=>matchFilter(p.date,f));
+  const total=invs.reduce((s,i)=>s+i.total,0);
+  const paid=pays.reduce((s,p)=>s+p.amount,0);
+  const byMethod={};
+  pays.forEach(p=>{ byMethod[p.method]=(byMethod[p.method]||0)+p.amount; });
+  document.getElementById('report-content').innerHTML=`
+    <div class="g3 stats-row" style="margin-bottom:14px">
+      <div class="stat-card"><div class="stat-label">Нийт нэхэмжлэл</div><div class="stat-value mono" style="font-size:18px;color:var(--blue2)">${fmtMoney(total)}</div></div>
+      <div class="stat-card"><div class="stat-label">Нийт төлсөн</div><div class="stat-value mono" style="font-size:18px;color:var(--green2)">${fmtMoney(paid)}</div></div>
+      <div class="stat-card"><div class="stat-label">Үлдэгдэл</div><div class="stat-value mono" style="font-size:18px;color:${total-paid>0?'var(--amber2)':'var(--green2)'}">${fmtMoney(total-paid)}</div></div>
+    </div>
+    <div class="g2">
+      <div class="card"><div class="card-title">Төлбөрийн хэлбэрээр</div>${Object.entries(byMethod).map(([k,v])=>`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span>${k}</span><span class="mono" style="font-weight:700;color:var(--green2)">${fmtMoney(v)}</span></div>`).join('')||'<div class="empty-text">Байхгүй</div>'}</div>
+      <div class="card"><div class="card-title">Харилцагчийн үлдэгдэл</div>${db.clients.map(c=>{const ci=invs.filter(i=>i.clientId===c.id).reduce((s,i)=>s+i.total,0);const cp=pays.filter(p=>p.clientId===c.id).reduce((s,p)=>s+p.amount,0);const rem=ci-cp;return rem>0?`<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid var(--line2)"><span style="font-weight:600">${c.name}</span><span class="badge b-amber">${fmtMoney(rem)}</span></div>`:''}).join('')||'<div class="empty"><div class="empty-icon">✅</div><div class="empty-text">Бүгд тооцоо дутуугүй</div></div>'}</div>
+    </div>`;
+}
+
+function renderRepMare(f){
+  const mares=db.mares;
+  document.getElementById('report-content').innerHTML = `<div class="tbl-wrap"><table><thead><tr><th>Гүүний нэр</th><th>Харилцагч</th><th>Азарга</th><th>Статус</th><th>Гишгүүлэлт</th><th>Үзлэг</th><th>Ирсэн огноо</th></tr></thead><tbody>
+    ${mares.map(m=>{
+      const s=db.stallions.find(x=>x.id===m.stallionId);
+      const c=db.clients.find(x=>x.id===m.clientId);
+      const breeds=db.breedings.filter(b=>b.mareId===m.id&&b.done).length;
+      const exams=db.exams.filter(e=>e.mareId===m.id&&e.done).length;
+      return `<tr onclick="openMareDetail(${m.id})" style="cursor:pointer">
+        <td style="font-weight:700">♀ ${m.name}<div style="font-size:11px;color:var(--muted);font-family:var(--mono)">${m.chip||''}</div></td>
+        <td style="font-weight:500">${c?c.name:'—'}</td>
+        <td style="color:var(--blue)">♂ ${s?s.name:'—'}</td>
+        <td><span class="badge ${m.pregnant?'b-green':m.estrus==='in'?'b-amber':'b-gray'}">${m.pregnant?'Хээлтэй':m.estrus==='in'?'Ороонд':'Хэвийн'}</span></td>
+        <td class="mono" style="font-weight:700;color:var(--gold)">${breeds}</td>
+        <td class="mono">${exams}</td>
+        <td class="mono" style="font-size:11px">${fmtDate(m.arrived)}</td>
+      </tr>`;
+    }).join('')}
+  </tbody></table></div>`;
+}
+
+// ══════════════════════════════════════════════════════
+//  SETTINGS
+// ══════════════════════════════════════════════════════
+function loadSettings(){
+  document.getElementById('api-url').value=db.settings.apiUrl||'';
+  document.getElementById('price-breeding').value=db.settings.priceBreeding||500000;
+  document.getElementById('price-exam').value=db.settings.priceExam||50000;
+  // Sync queue мэдээлэл
+  const q=(db.syncQueue||[]);
+  const failed=q.filter(o=>o._failed).length;
+  const pending=q.filter(o=>!o._failed).length;
+  const el=document.getElementById('sync-queue-info');
+  if(!el) return;
+  if(!q.length){
+    el.innerHTML='<div class="info-block ib-green">✅ Бүх өгөгдөл Sheets-рүү дамжсан — дараалал хоосон</div>';
+  } else {
+    el.innerHTML=`<div class="info-block ${failed?'ib-amber':'ib-blue'}">
+      <strong>${pending} үйлдэл хүлээж байна</strong>${failed?` · ${failed} үйлдэл алдаатай`:''}
+      <br>Интернэт орох үед автоматаар дамжуулагдана.
+      <div style="margin-top:8px;font-size:11px;color:var(--muted)">
+        ${q.slice(0,5).map(o=>`<div>${o.method} ${o.path} ${o._failed?'❌':o.retries?`⚠️ ${o.retries}x`:''}</div>`).join('')}
+        ${q.length>5?`<div>...болон ${q.length-5} бусад</div>`:''}
+      </div>
+    </div>`;
+  }
+}
+function saveSettings(){
+  db.settings.apiUrl=document.getElementById('api-url').value.trim();
+  saveDB(); toast('Тохиргоо хадгалагдлаа ✓','ok');
+}
+function savePrices(){
+  db.settings.priceBreeding=parseInt(document.getElementById('price-breeding').value)||500000;
+  db.settings.priceExam=parseInt(document.getElementById('price-exam').value)||50000;
+  saveDB(); toast('Тариф хадгалагдлаа ✓','ok');
+}
+
+// ══════════════════════════════════════════════════════
+//  POPULATE DROPDOWNS
+// ══════════════════════════════════════════════════════
+function populateSchedDropdown(){
+  const sel=document.getElementById('sch-mare');
+  if(sel) sel.innerHTML='<option value="">— Гүү сонгох —</option>'+db.mares.map(m=>`<option value="${m.id}">${m.name}</option>`).join('');
+}
+function populateQEDropdown(){
+  const sel=document.getElementById('qe-mare');
+  if(sel) sel.innerHTML='<option value="">— Гүү сонгох —</option>'+db.mares.map(m=>`<option value="${m.id}">${m.name} (${m.clientName||'—'})</option>`).join('');
+}
+function populateAllDropdowns(){
+  populateMareDropdowns(); populateSchedDropdown(); populateQEDropdown();
+  const brMare=document.getElementById('br-mare');
+  if(brMare){ brMare.innerHTML='<option value="">— Гүү сонгох —</option>'+db.mares.map(m=>`<option value="${m.id}">${m.name}</option>`).join(''); }
+  const brStal=document.getElementById('br-stallion');
+  if(brStal){ brStal.innerHTML='<option value="">— Азарга сонгох —</option>'+db.stallions.map(s=>`<option value="${s.id}">${s.name}</option>`).join(''); }
+  const invCl=document.getElementById('inv-client');
+  if(invCl){ invCl.innerHTML='<option value="">— Харилцагч сонгох —</option>'+db.clients.map(c=>`<option value="${c.id}">${c.name}</option>`).join(''); }
+}
+
+function mdTab(tab,btn){
+  ['info','exams','breeding','finance'].forEach(t=>{ document.getElementById('md-'+t).style.display=t===tab?'block':'none'; });
+  document.querySelectorAll('#modal-mare-detail .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+function openExamDetail(id){} // placeholder
+
+// ══════════════════════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════════════════════
+loadDB();
+// syncQueue баталгаажуулах
+if(!Array.isArray(db.syncQueue)) db.syncQueue=[];
+// Report year selector
+const ry=document.getElementById('report-year');
+if(ry){ const cy=new Date().getFullYear(); for(let y=cy;y>=cy-5;y--){ const o=document.createElement('option'); o.value=y; o.textContent=y; if(y===cy) o.selected=true; ry.appendChild(o); } }
+// Today date label
+document.getElementById('dash-date').textContent=new Date().toLocaleDateString('mn-MN',{year:'numeric',month:'long',day:'numeric',weekday:'long'});
+populateAllDropdowns();
+updateBadges();
+updateSyncIndicator();
+renderDashboard();
+// Эхлэхэд интернэт байвал хүлээгдэж буй sync дамжуулна
+if(navigator.onLine && apiBase() && db.syncQueue?.filter(o=>!o._failed).length > 0){
+  setTimeout(flushQueue, 2000);
+}
+
+document.addEventListener('click',e=>{
+  if(_drawerJustOpened) return;
+  if(!e.target.closest('#drawer')&&!e.target.closest('.topbar-menu-btn')&&!e.target.closest('#bni-more')) closeDrawer();
+});
+
+</script>
+</body>
+</html>
